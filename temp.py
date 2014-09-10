@@ -11,7 +11,7 @@ def addItems_windwosMake(ignore=''):
 	global addItemsWindow
 	addItemsWindow=Toplevel(itemWindow)
 	addItemsWindow.protocol("WM_DELETE_WINDOW",addItems_windowDelete)
-def addItems_windowDelete(ignore=''):	
+def addItems_windowDelete(ignore=''):
 	addItemsWindow.destroy()
 
 #Items window
