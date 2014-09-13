@@ -20,12 +20,29 @@ class people:
 		for person in self.people:
 			if person['name']==name:return person
 			if person['IDNumber']==name:return person
+		return None
 
 	def __getitem__(self,entry):
 		if type(entry)==type(0): #if an integer
 			return self.people[entry]
 		else:
 			return self.get_person(entry)
+
+	def __iter__(self):
+		for person in self.people:
+			yield person
+
+	def dueItems(self,person=None):
+		if person==None:
+			print "Will on day return a list of lists that have all people and the assosiated DUE items, and not past items"
+			return
+		elif type(person)==type("") or type(person)==type(0): #we already have figured out how to get people by index terms like this so we are using these
+			person=self[person]
+		if person==None: #it got here which means the person was searched for and not found.
+			return None #no person means bad search
+		#we are guarenteed a valid person dict now
+		items=person["items"]
+		return items #testing, this will have past items also
 
 	def addPerson(self,IDNumber,keys={}):
 		self.modify_person(IDNumber,keys)

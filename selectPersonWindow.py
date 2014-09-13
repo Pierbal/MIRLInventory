@@ -25,7 +25,7 @@ class personSelectWindow(Toplevel):
 	def body(self):
 		self.elements={}
 		self.elements["personList"]=Listbox(self.rootFrame)
-		self.elements["personList"].grid(row=0,column=0,rowspan=999)
+		self.elements["personList"].grid(row=0,column=0,rowspan=999,sticky=N+S+W)
 		self.elements["personList"].focus_set()
 		self.elements["personList"].bind("<Button-1>",self.displayPerson_call)
 		self.elements["nameLabel"]=Label(self.rootFrame,text="Student Name")
@@ -43,8 +43,11 @@ class personSelectWindow(Toplevel):
 		self.elements["buttonChangePerson"].grid(row=11,column=1)
 
 		self.people=people() #auto populates the person list
-		for x in self.people.people:
+		for x in self.people:
 			self.elements["personList"].insert(END,x['name'])
+
+		self.elements["personList"].select_set(0)
+		self.displayPerson()
 
 	def displayPerson_call(self,ignore=""):self.root.after(1,self.displayPerson)
 	def displayPerson(self,ignore=""):

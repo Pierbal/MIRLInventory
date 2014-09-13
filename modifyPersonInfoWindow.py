@@ -11,7 +11,7 @@ class modifyPersonInfoWindow(Toplevel):
 		Toplevel.__init__(self, self.root)
 		self.transient(self.root)
 		self.protocol("WM_DELETE_WINDOW",self.delete)
-		self.title("Person Selection Window")
+		self.title("Person Info Modification Window")
 		self.result=None
 
 		self.rootFrame=Frame(self)
