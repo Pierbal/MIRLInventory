@@ -15,17 +15,8 @@ class items:
 			self.items[-1]['name']=x[:-5]
 			x=open('items/'+x,'r')
 			for line in x:
-				key=''
-				value=''
-				while(True): #get the key from the front of the line
-					if line[0]=='=':break
-					key+=line[0] #add to the key
-					line=line[1:] #already got this letter, delete it
-				line=line[1:] #delete the =
-				while(True):
-					if line[0]=='\n':break
-					value+=line[0]
-					line=line[1:]
+				key=line.split('=')[0]
+				value=line.split('=')[1][:-1]
 				self.items[-1][key]=value
 
 	def get_item(self,name):

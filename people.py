@@ -21,59 +21,61 @@ class people:
 			if person['name']==name:return person
 			if person['IDNumber']==name:return person
 
-	def modify_person(self,name,IDNumber,room,items):
-		if type(name)==type({}):
-			print "Will be added so can pass a modified dict"
-			return
-		temp=open('people/'+str(IDNumber)+'.info','w')
-		temp.write('name='+name+'\n')
-		temp.write('room='+room+'\n')
-		temp.write('items:\n')
-		for item in items:
-			temp.write(item[0]+'='+item[1]+'\n')
+	def __getitem__(self,entry):
+		if type(entry)==type(0): #if an integer
+			return self.people[entry]
+		else:
+			return self.get_person(entry)
+
+	def addPerson(self,IDNumber,keys={}):
+		self.modify_person(IDNumber,keys)
+
+	def modify_person(self,IDNumber,keys={}):
+		if type(IDNumber)==type({}): #if you pass in a dict then it will do the work still
+			temp=open('people/'+IDNumber["IDNumber"]+'.info','w') #NOTE!: IDNumber is really the person dict
+			for x in IDNumber:
+				if x=='items':
+					continue
+				temp.write(x+'='+IDNumber[x]+'\n')
+			temp.write("items:\n")
+			for item in IDNumber["items"]:
+				temp.write(item[0]+'='+item[1])+'\n'
+			temp.close()
+		else:
+			temp=open('people/'+str(IDNumber)+'.info','w')
+			for x in keys:
+				if x=='items': continue
+				temp.write(x+'='+keys[x])
+			temp.write('items:\n')
+			for item in items:
+				temp.write(item[0]+'='+item[1]+'\n')
+			temp.close()
+		self.update_people()
 
 	def update_people(self):
 		people=[]
 		for x in os.walk('people'):
 			people=x[2]
+			break
 		self.people=[]
 		for person in people:
 			self.people.append({'items':[]})
-			self.people[-1]['IDNumber']=person[:-5]
+			self.people[-1]['IDNumber']=person.split('.')[0]
 			temp=open('people/'+person,'r')
 			itemsSection=False #flips to true when we find the list of items checked out by the person
 			for line in temp:
 				if line=='items:\n':
 					itemsSection=True
 					continue
-				if itemsSection==False:	
+				if itemsSection==False:	#not the items lines yet
 					key=''
 					value=''
-					while(True):
-						if line[0]=='=':
-							break
-						key+=line[0]
-						line=line[1:]
-					line=line[1:]
-					while(True):
-						if line[0]=='\n':
-							break
-						value+=line[0]
-						line=line[1:]
+					key=line.split("=")[0]
+					value=line.split("=")[1][:-1] #remember that this will have a newline at the end
 					self.people[-1][key]=value
-				if itemsSection==True:
-					item=''
-					date=''
-					while(True):
-						if line[0]=='=':
-							break
-						item+=line[0]
-						line=line[1:]
+				if itemsSection==True: #format has changed!!!!!! the format is for the items which are always at the end of the file
+					item=line.split('=')[0]
+					date=line.split('=')[1][:-1]
 					line=line[1:]
-					while(True):
-						if line[0]=='\n':
-							break
-						date+=line[0]
-						line=line[1:]
 					self.people[-1]['items'].append([item,date])
 				

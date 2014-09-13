@@ -1,5 +1,6 @@
 from Tkinter import *
 from modifyPersonWindow import personWindow
+from modifyPersonInfoWindow import modifyPersonInfoWindow
 from people import people
 
 class personSelectWindow(Toplevel):
@@ -26,7 +27,7 @@ class personSelectWindow(Toplevel):
 		self.elements["personList"]=Listbox(self.rootFrame)
 		self.elements["personList"].grid(row=0,column=0,rowspan=999)
 		self.elements["personList"].focus_set()
-		self.elements["personList"].bind("<Button-1>",self.displayPerson)
+		self.elements["personList"].bind("<Button-1>",self.displayPerson_call)
 		self.elements["nameLabel"]=Label(self.rootFrame,text="Student Name")
 		self.elements["nameLabel"].grid(row=0,column=1)
 		self.elements["muidLabel"]=Label(self.rootFrame,text="Student Number")
@@ -35,17 +36,33 @@ class personSelectWindow(Toplevel):
 		self.elements["roomLabel"].grid(row=2,column=1)
 		self.elements["itemsLabel"]=Label(self.rootFrame,text="Items:\nLine 1\nLine2")
 		self.elements["itemsLabel"].grid(row=3,column=1)
-		
-		self.elements["buttonAddItems"]=Button(self.rootFrame,text="Add Items")
-		self.elements["buttonAddItems"].grid(row=10,column=1)
 
-		self.people=people()
+		self.elements["buttonAddItems"]=Button(self.rootFrame,text="Add/Remove Items")
+		self.elements["buttonAddItems"].grid(row=10,column=1)
+		self.elements["buttonChangePerson"]=Button(self.rootFrame,text="Change Information",command=self.modifyPersonInfo_call)
+		self.elements["buttonChangePerson"].grid(row=11,column=1)
+
+		self.people=people() #auto populates the person list
 		for x in self.people.people:
-			print x
 			self.elements["personList"].insert(END,x['name'])
 
+	def displayPerson_call(self,ignore=""):self.root.after(1,self.displayPerson)
 	def displayPerson(self,ignore=""):
-		self.elements["personList"]
+		index=int(self.elements["personList"].curselection()[0])
+		person=self.people[index]
+		self.elements["nameLabel"].config(text=person['name'])
+		self.elements["muidLabel"].config(text="MUID: "+person["IDNumber"])
+		self.elements["roomLabel"].config(text="Room: "+person["room"])
+
+		temp="Items Due:"
+		for x in person["items"]:
+			temp+='\n'+str(x[0])+": "+str(x[1])
+		self.elements["itemsLabel"].config(text=temp)
+
+	def modifyPersonInfo_call(self,ignore=""):self.root.after(1,self.modifyPersonInfo)
+	def modifyPersonInfo(self,ignore=""):
+		index=int(self.elements["personList"].curselection()[0])
+		self.modifyPerson=modifyPersonInfoWindow(self,self.people,index)
 
 	def delete(self,ignore=""):
 		self.grab_release()

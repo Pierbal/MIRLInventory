@@ -7,6 +7,7 @@ root=Tk()
 def exitProgram(ignore=""):root.quit()
 root.protocol("WM_DELETE_WINDOW",exitProgram)
 
+#body
 buttonPerson=Button(root,text="Person Selection")
 buttonPerson.grid(row=0,column=0)
 entryAdmin=Entry(root)
