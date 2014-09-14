@@ -136,13 +136,7 @@ class personWindow(Toplevel):
 		otherVersionOfTheItem['used']=str(int(otherVersionOfTheItem['used'])-1)
 		self.items.modify_item(otherVersionOfTheItem)
 
-		self.elements["itemsHave"].delete(0,END)
-		for item in self.people.dueItems(self.person):
-			self.elements["itemsHave"].insert(END,item[0])
-			if(self.people.isOverdue(item)):
-				self.elements["itemsHave"].itemconfig(END,bg='red')
-			else:
-				self.elements["itemsHave"].itemconfig(END,bg='green')
+		self.redrawnLists()
 
 	def checkoutItem_call(self,ignore=""):self.root.after(1,self.checkoutItem)
 	def checkoutItem(self,ignore=""):
@@ -160,6 +154,10 @@ class personWindow(Toplevel):
 		item['used']=str(int(item['used'])+1)
 		self.items.modify_item(item)
 
+		self.redrawnLists()
+		self.displayItemInfo()
+
+	def redrawnLists(self,ignore=""):
 		self.elements["itemsHave"].delete(0,END)
 		for item in self.people.dueItems(self.person):
 			self.elements["itemsHave"].insert(END,item[0])
@@ -167,7 +165,11 @@ class personWindow(Toplevel):
 				self.elements["itemsHave"].itemconfig(END,bg='red')
 			else:
 				self.elements["itemsHave"].itemconfig(END,bg='green')
-		self.displayItemInfo()
+		self.elements['itemsAvailable'].delete(0,END)
+		for item in self.items:
+			self.elements['itemsAvailable'].insert(END,item['name'])
+			self.searchedItems.append(item)
+			if item["used"]==item["quantity"]:self.elements['itemsAvailable'].itemconfig(END,bg='red')
 
 	def delete(self,ignore=""):
 		if self.modifiedItems:self.people.emailPerson(self.person,self.elements["customMessageEntry"].get())
