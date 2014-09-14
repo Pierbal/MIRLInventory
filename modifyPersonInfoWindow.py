@@ -25,7 +25,7 @@ class modifyPersonInfoWindow(Toplevel):
 	def body(self):
 		self.people=people()
 		self.elements={}
-		self.elements["idLabel"]=Label(self.rootFrame,text=self.person["IDNumber"])
+		self.elements["idLabel"]=Label(self.rootFrame,text="MUID: "+self.person["IDNumber"])
 		self.elements["idLabel"].grid(row=0,column=0,columnspan=2)
 
 		self.elements["nameLabel"]=Label(self.rootFrame,text="Name:  ")
@@ -46,14 +46,21 @@ class modifyPersonInfoWindow(Toplevel):
 		self.elements["phoneEntry"].insert(0,self.person["phoneNumber"])
 		self.elements["phoneEntry"].grid(row=3,column=1)
 
+		self.elements["emailLabel"]=Label(self.rootFrame,text="Email: ")
+		self.elements["emailLabel"].grid(row=4,column=0)
+		self.elements["emailEntry"]=Entry(self.rootFrame)
+		self.elements["emailEntry"].grid(row=4,column=1)
+		self.elements["emailEntry"].insert(0,self.person['email'])
+
 		self.elements["buttonChange"]=Button(self.rootFrame,text='Apply Changes',command=self.applyChanges_call)
-		self.elements["buttonChange"].grid(row=4,column=0,columnspan=2)
+		self.elements["buttonChange"].grid(row=10,column=0,columnspan=2)
 
 	def applyChanges_call(self,ignore=""):self.root.after(1,self.applyChanges)
 	def applyChanges(self,ignore=""):
 		self.person["name"]=self.elements["nameEntry"].get()
 		self.person["room"]=self.elements["roomEntry"].get()
 		self.person["phoneNumber"]=self.elements["phoneEntry"].get()
+		self.person['email']=self.elements["emailEntry"].get()
 
 		self.people.modify_person(self.person)
 		self.delete()

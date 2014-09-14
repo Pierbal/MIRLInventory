@@ -44,6 +44,7 @@ class personSelectWindow(Toplevel):
 
 		self.people=people() #auto populates the person list
 		for x in self.people:
+			print x
 			self.elements["personList"].insert(END,x['name'])
 
 		self.elements["personList"].select_set(0)

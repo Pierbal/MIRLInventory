@@ -8,6 +8,7 @@ class personWindow(Toplevel):
 	def __init__(self,ROOT,people,personIndex):
 		self.people=people
 		self.person=self.people[personIndex]
+		self.modifiedItems=False
 
 		self.root=ROOT
 		Toplevel.__init__(self, self.root)
@@ -120,6 +121,7 @@ class personWindow(Toplevel):
 
 	def checkinItem_call(self,ignore=""):self.root.after(1,self.checkinItem)
 	def checkinItem(self,ignore=""):
+		self.modifiedItems=True
 		index=int(self.elements["itemsHave"].curselection()[0])
 		item=self.people.dueItems(self.person)[index]
 		for x in xrange(len(self.person['items'])):
@@ -142,6 +144,7 @@ class personWindow(Toplevel):
 
 	def checkoutItem_call(self,ignore=""):self.root.after(1,self.checkoutItem)
 	def checkoutItem(self,ignore=""):
+		self.modifiedItems=True
 		index=int(self.elements["itemsAvailable"].curselection()[0])
 		if self.searchedItems[index]['quantity']==self.searchedItems[index]['used']:
 			return
@@ -165,5 +168,6 @@ class personWindow(Toplevel):
 		self.displayItemInfo()
 
 	def delete(self,ignore=""):
+		if self.modifiedItems:self.people.emailPerson(self.person)
 		self.grab_release()
 		self.destroy()

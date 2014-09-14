@@ -1,6 +1,7 @@
 import os
 from datetime import datetime 
 from items import items
+import smtplib
 
 class people:
 	def __init__(self):
@@ -131,7 +132,6 @@ class people:
 				temp.write(item[0]+'='+item[1]+'\n')
 			temp.close()
 		self.update_people()
-		self.emailPerson(IDNumber)
 
 	def update_people(self):
 		people=[]
@@ -175,4 +175,12 @@ class people:
 		message+='\nCharges Due If Not Returned: '+str(cost)
 		message+="\n\nPlease contact mirllabmanager@gmail.com for any questions or concerns\n\n"
 
-		print message
+		try:
+			server=smtplib.SMTP()
+			server.connect('smtp.gmail.com',587)
+			server.starttls()
+			server.login("mirllabmanager@gmail.com","labmanager232")
+			server.sendmail("mirllabmanager@gmail.com",person['email'],message) #from,to,message
+		except Exception,r:
+			print "UNABLE TO SEND EMAIL!!!!"
+			print r
