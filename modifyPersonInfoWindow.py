@@ -62,8 +62,10 @@ class modifyPersonInfoWindow(Toplevel):
 		self.person["phoneNumber"]=self.elements["phoneEntry"].get()
 		self.person['email']=self.elements["emailEntry"].get()
 
+		changes="Modified Contact Information\n"+self.person['phoneNumber']+'  --  '+self.person['email']
+
 		self.people.modify_person(self.person)
-		self.people.emailPerson(self.person)
+		self.people.emailPerson(self.person,changes)
 		self.delete()
 
 	def delete(self,ignore=""):
