@@ -1,3 +1,5 @@
-quantity=1
-used=3
+quantity=3
+used=0
 tags=wrench cresent
+daysAllowed=10
+price=12.0

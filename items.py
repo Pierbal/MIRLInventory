@@ -4,6 +4,20 @@ class items:
 	def __init__(self):
 		self.items=[]
 		self.update_items()
+
+	def __iter__(self):
+		for item in self.items:
+			yield item
+	def __getitem__(self,index):
+		if type(index)==type(0):
+			return self.items[index]
+		elif type(index)==type(""):
+			for item in self.items:
+				if item['name']==index:
+					return item
+			return None
+		raise TypeError("cannont handle "+str(type(index))+ "  :  "+str(index))
+
 	def update_items(self):
 		files=[]
 		self.items=[]
@@ -11,17 +25,23 @@ class items:
 			files=x[2]
 
 		for x in files:
+			if not x.split('.')[1]=='info': continue
 			self.items.append({})
-			self.items[-1]['name']=x[:-5]
+			self.items[-1]['name']=x.split('.')[0]
 			x=open('items/'+x,'r')
 			for line in x:
 				key=line.split('=')[0]
 				value=line.split('=')[1][:-1]
 				self.items[-1][key]=value
 
-	def get_item(self,name):
-		for item in self.items:
-			if item['name']==name: return item
+	def getitem(self,name):
+		if type(name)==type(""):
+			for item in self.items:
+				if item['name']==name: return item
+		elif type(name)==type(0):
+			return self.items[name]
+		else:
+			raise TypeError("cannont handle "+str(type(name))+ "  :  "+str(name))
 
 	def search_items(self,term):
 		#searches the items for a match in either name OR tags
@@ -43,35 +63,32 @@ class items:
 
 		return found #return a list of items found to match
 
-	def modify_item(self,name,quantity,used,tags):
+	def modify_item(self,name,quantity=None,used=None,tags=None,daysAllowed=None):
 		#update the file
-		temp=open('items/'+name+'.info','w')
-		temp.write('quantity='+quantity+'\n')
-		temp.write('used='+used+'\n')
-		if type(tags)==list:
-			temp.write('tags=')
-			for tag in tags:
-				temp.write(tag+' ')
-			temp.write('\n')
-		if type(tags)==type('') or type(tags)==type(""):
-			temp.write('tags='+tags+'\n')
+		if type(name)==type("") and quantity:
+			temp=open('items/'+name+'.info','w')
+			temp.write('quantity='+quantity+'\n')
+			temp.write('used='+used+'\n')
+			if type(tags)==list:
+				temp.write('tags=')
+				for tag in tags:
+					temp.write(tag+' ')
+				temp.write('\n')
+			if type(tags)==type('') or type(tags)==type(""):
+				temp.write('tags='+tags+'\n')
+			temp.write('daysAllowed='+str(daysAllowed)+'\n')
+			temp.close()
+		elif type(name)==type({}):
+			temp=open('items/'+name['name']+'.info','w')
+			for x in name:
+				if type(name[x])==type(""):temp.write(x+'='+name[x]+'\n')
+				else:raise TypeError("connot write to file anything but strings : "+str(x)+'   '+type(x))
+			temp.close()
+		else:
+			raise TypeError("connot deal with "+str(type(name))+"  :  "+ str(name))
+
 		
-		foundTheItem=False
-		for x in self.items: #see if we are updating an item
-			if x['name']==name:
-				foundTheItem=True
-				x['quantity']=quantity
-				x['used']=used
-				if type(tags)==list:
-					x['tags']=''
-					for tag in tags:
-						x['tags']+=tag+' '
-				if type(tags)==type('') or type(tags)==type(""):
-					x['tags']=tags
-				break #don't look for other items, we already found it
-		if foundTheItem==False: #nope, new item, so lets add it to the list
-			self.items.append({})
-			self.items[-1]['name']=name
+		self.update_items()
 				
 	def add_item(self,name,quantity,used,tags):
 		self.modify_item(name,quantity,used,tags) #got lazy, but hey, it does the job

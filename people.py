@@ -1,5 +1,6 @@
 import os
 from datetime import datetime 
+from items import items
 
 class people:
 	def __init__(self):
@@ -17,6 +18,18 @@ class people:
 					found.append(person)
 					break
 		return found
+
+	def searchItem(self,item):
+		if type(item)==type({}):
+			item=item['name']
+		if not type(item)==type(""):
+			raise TypeError("cannot handle "+str(type(item))+"  :  "+str(item))
+		tempPeople=[]
+		for person in self.people:
+			for x in person['items']:
+				if x[0]==item:
+					tempPeople.append(person)
+		return tempPeople
 
 	def get_person(self,name):
 		for person in self.people:
@@ -42,11 +55,12 @@ class people:
 			raise TypeError
 		today=datetime.today()
 		itemTime=datetime.strptime(item[1],"%m-%d-%Y")
-		if (x[2]=='out' or item[2]=='damaged') and itemTime<today:
+		if (item[2]=='out' or item[2]=='damaged') and itemTime<today:
 			return True
 		return False
 
 	def overdueItems(self,person=None):
+		#returns only overdue items
 		if person==None:
 			print "Will on day return a list of lists that have all people and the assosiated OVERDUE items"
 			return
@@ -64,6 +78,7 @@ class people:
 		return overdueItems
 
 	def dueItems(self,person=None):
+		#returns the items that are currently checked out, weither or not they are overdue
 		if person==None:
 			print "Will on day return a list of lists that have all people and the assosiated DUE items, and not past items"
 			return
@@ -76,7 +91,21 @@ class people:
 		for item in person["items"]:
 			if item[2]=='out' or item[2]=='damaged':
 				dueItems.append(item)
-		return dueItems #testing, this will have past items also
+		return dueItems 
+
+	def pastItems(self,person=None):
+		if person==None:
+			print "Will on day return a list of lists that have all people and the assosiated DUE items, and not past items"
+			return
+		elif type(person)==type("") or type(person)==type(0): #we already have figured out how to get people by index terms like this so we are using these
+			person=self[person]
+		if person==None: #it got here which means the person was searched for and not found.
+			return None #no person means bad search
+		pastItems=[]
+		for item in person["items"]:
+			if not (item[2]=='out' or item[2]=='damaged'):
+				pastItems.append(item)
+		return pastItems
 
 	def addPerson(self,IDNumber,keys={}):
 		self.modify_person(IDNumber,keys)
@@ -90,7 +119,7 @@ class people:
 				temp.write(x+'='+IDNumber[x]+'\n')
 			temp.write("items:\n")
 			for item in IDNumber["items"]:
-				temp.write(item[0]+'='+item[1])+'\n'
+				temp.write(item[0]+'='+item[1]+'='+item[2]+'\n')
 			temp.close()
 		else:
 			temp=open('people/'+str(IDNumber)+'.info','w')
@@ -102,6 +131,7 @@ class people:
 				temp.write(item[0]+'='+item[1]+'\n')
 			temp.close()
 		self.update_people()
+		self.emailPerson(IDNumber)
 
 	def update_people(self):
 		people=[]
@@ -131,3 +161,18 @@ class people:
 					line=line[1:]
 					self.people[-1]['items'].append([item,date,state])
 				
+
+	def emailPerson(self,person,message=""):
+		#send an email with all information of due items, account info, and overdue items
+		self.items=items()
+		if not type(person)==type({}): raise TypeError("You MUST send in a person dict")
+		message="MIRL CHECKOUT SYSTEM UPDATE EMAIL\nPlease read over the information for correctness\n\n"+message+'\n\n'
+		message+="Due Items:\n"
+		cost=0
+		for x in self.dueItems(person):
+			message+="    due "+x[1]+" - cost: "+self.items.getitem(x[0])['price']+"  --  "+x[0]+'\n'
+			cost+=float(self.items.getitem(x[0])['price'])
+		message+='\nCharges Due If Not Returned: '+str(cost)
+		message+="\n\nPlease contact mirllabmanager@gmail.com for any questions or concerns\n\n"
+
+		print message

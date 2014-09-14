@@ -5,7 +5,6 @@ class modifyPersonInfoWindow(Toplevel):
 	def __init__(self,ROOT,people,personIndex):
 		self.people=people
 		self.person=self.people[personIndex]
-		print self.person
 
 		self.root=ROOT
 		Toplevel.__init__(self, self.root)
