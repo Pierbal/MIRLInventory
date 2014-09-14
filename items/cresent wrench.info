@@ -1,5 +1,6 @@
-quantity=3
 used=0
+name=cresent wrench
 tags=wrench cresent
-daysAllowed=10
 price=12.0
+daysAllowed=10
+quantity=3

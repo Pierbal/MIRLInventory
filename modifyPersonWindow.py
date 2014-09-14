@@ -45,6 +45,8 @@ class personWindow(Toplevel):
 		self.elements["itemsAvailable"].grid(row=2,column=1,sticky=N+S,rowspan=999)
 		self.elements["itemsAvailable"].bind("<Button-1>",self.displayItemInfo_call)
 
+		self.elements['customMessageEntry']=Entry(self.rootFrame)
+		self.elements['customMessageEntry'].grid(row=0,column=2)
 		self.elements["itemInfoName"]=Label(self.rootFrame,text="NAME GOES HERE")
 		self.elements["itemInfoName"].grid(row=2,column=2)
 		self.elements["itemInfoQuantityLeft"]=Label(self.rootFrame,text="Number Left: 0")
@@ -168,6 +170,6 @@ class personWindow(Toplevel):
 		self.displayItemInfo()
 
 	def delete(self,ignore=""):
-		if self.modifiedItems:self.people.emailPerson(self.person)
+		if self.modifiedItems:self.people.emailPerson(self.person,self.elements["customMessageEntry"].get())
 		self.grab_release()
 		self.destroy()

@@ -2,6 +2,8 @@ import os
 from datetime import datetime 
 from items import items
 import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 class people:
 	def __init__(self):
@@ -166,7 +168,7 @@ class people:
 		#send an email with all information of due items, account info, and overdue items
 		self.items=items()
 		if not type(person)==type({}): raise TypeError("You MUST send in a person dict")
-		message="MIRL CHECKOUT SYSTEM UPDATE EMAIL\nPlease read over the information for correctness\n\n"+message+'\n\n'
+		message="MIRL CHECKOUT SYSTEM UPDATE EMAIL\nPlease read over the information for correctness\n\n"+person['name']+' - '+person["room"]+'\n'+message+'\n'
 		message+="Due Items:\n"
 		cost=0
 		for x in self.dueItems(person):
@@ -175,12 +177,23 @@ class people:
 		message+='\nCharges Due If Not Returned: '+str(cost)
 		message+="\n\nPlease contact mirllabmanager@gmail.com for any questions or concerns\n\n"
 
+		fullMessage=MIMEMultipart()
+		fullMessage['From']="mirlcheckoutsystem@gmail.com"
+		fullMessage["To"]=person['email']
+		fullMessage["Subject"]="MIRL TOOLS UPDATE"
+		fullMessage.attach(MIMEText(message,'plain'))
+
 		try:
 			server=smtplib.SMTP()
 			server.connect('smtp.gmail.com',587)
 			server.starttls()
-			server.login("mirllabmanager@gmail.com","labmanager232")
-			server.sendmail("mirllabmanager@gmail.com",person['email'],message) #from,to,message
+			server.login("mirlcheckoutsystem@gmail.com","labmanager232")
+			server.sendmail("mirlcheckoutsystem@gmail.com",person['email'],fullMessage.as_string()) #from,to,message
 		except Exception,r:
 			print "UNABLE TO SEND EMAIL!!!!"
 			print r
+
+	def emailPersonOverdue(self,person,message=""):
+		#send an email with all information of overdue items, account info
+		self.items=items()
+		if not type(person)==type({}): raise TypeError("You MUST send in a person dict")

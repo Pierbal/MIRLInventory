@@ -1,7 +1,8 @@
-phoneNumber=None
 name=Dr Choi
-room=EGC 100000
+IDNumber=No Need
+phoneNumber=None
 email=none
+room=EGC Electrical Suite
 items:
 hammer=04-23-2014=out
 hammer=04-23-2014=out

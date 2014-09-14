@@ -63,6 +63,7 @@ class modifyPersonInfoWindow(Toplevel):
 		self.person['email']=self.elements["emailEntry"].get()
 
 		self.people.modify_person(self.person)
+		self.people.emailPerson(self.person)
 		self.delete()
 
 	def delete(self,ignore=""):
