@@ -1,4 +1,6 @@
 import os
+from datetime import datetime 
+
 class people:
 	def __init__(self):
 		self.update_people()
@@ -32,6 +34,35 @@ class people:
 		for person in self.people:
 			yield person
 
+	def __len__(self):
+		return len(self.people)
+
+	def isOverdue(self,item):
+		if not type(item)==type([]):
+			raise TypeError
+		today=datetime.today()
+		itemTime=datetime.strptime(item[1],"%m-%d-%Y")
+		if (x[2]=='out' or item[2]=='damaged') and itemTime<today:
+			return True
+		return False
+
+	def overdueItems(self,person=None):
+		if person==None:
+			print "Will on day return a list of lists that have all people and the assosiated OVERDUE items"
+			return
+		elif type(person)==type("") or type(person)==type(0): #we already have figured out how to get people by index terms like this so we are using these
+			person=self[person]
+		if person==None: #it got here which means the person was searched for and not found.
+			return None #no person means bad search
+		#we are guarenteed a valid person dict now
+		overdueItems=[]
+		today=datetime.today()
+		for x in person["items"]:
+			itemTime=datetime.strptime(x[1],"%m-%d-%Y")
+			if self.isOverdue(x):
+				overdueItems.append(x)
+		return overdueItems
+
 	def dueItems(self,person=None):
 		if person==None:
 			print "Will on day return a list of lists that have all people and the assosiated DUE items, and not past items"
@@ -41,8 +72,11 @@ class people:
 		if person==None: #it got here which means the person was searched for and not found.
 			return None #no person means bad search
 		#we are guarenteed a valid person dict now
-		items=person["items"]
-		return items #testing, this will have past items also
+		dueItems=[]
+		for item in person["items"]:
+			if item[2]=='out' or item[2]=='damaged':
+				dueItems.append(item)
+		return dueItems #testing, this will have past items also
 
 	def addPerson(self,IDNumber,keys={}):
 		self.modify_person(IDNumber,keys)
@@ -92,7 +126,8 @@ class people:
 					self.people[-1][key]=value
 				if itemsSection==True: #format has changed!!!!!! the format is for the items which are always at the end of the file
 					item=line.split('=')[0]
-					date=line.split('=')[1][:-1]
+					date=line.split('=')[1]
+					state=line.split('=')[2][:-1]
 					line=line[1:]
-					self.people[-1]['items'].append([item,date])
+					self.people[-1]['items'].append([item,date,state])
 				

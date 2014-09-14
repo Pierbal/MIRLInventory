@@ -37,7 +37,7 @@ class personSelectWindow(Toplevel):
 		self.elements["itemsLabel"]=Label(self.rootFrame,text="Items:\nLine 1\nLine2")
 		self.elements["itemsLabel"].grid(row=3,column=1)
 
-		self.elements["buttonAddItems"]=Button(self.rootFrame,text="Add/Remove Items")
+		self.elements["buttonAddItems"]=Button(self.rootFrame,text="Add/Remove Items",command=self.modifyPersonItems_call)
 		self.elements["buttonAddItems"].grid(row=10,column=1)
 		self.elements["buttonChangePerson"]=Button(self.rootFrame,text="Change Information",command=self.modifyPersonInfo_call)
 		self.elements["buttonChangePerson"].grid(row=11,column=1)
@@ -58,7 +58,7 @@ class personSelectWindow(Toplevel):
 		self.elements["roomLabel"].config(text="Room: "+person["room"])
 
 		temp="Items Due:"
-		for x in person["items"]:
+		for x in self.people.dueItems(person):
 			temp+='\n'+str(x[0])+": "+str(x[1])
 		self.elements["itemsLabel"].config(text=temp)
 
@@ -66,6 +66,11 @@ class personSelectWindow(Toplevel):
 	def modifyPersonInfo(self,ignore=""):
 		index=int(self.elements["personList"].curselection()[0])
 		self.modifyPerson=modifyPersonInfoWindow(self,self.people,index)
+
+	def modifyPersonItems_call(self,ignore=""):self.root.after(1,self.modifyPersonItems)
+	def modifyPersonItems(self,ignore=""):
+		index=int(self.elements["personList"].curselection()[0])
+		self.modifyPerson=personWindow(self,self.people,index)
 
 	def delete(self,ignore=""):
 		self.grab_release()
