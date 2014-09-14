@@ -1,5 +1,6 @@
 from Tkinter import *
 from people import people
+from PIL import Image,ImageTk
 
 class personWindow(Toplevel):
 	def __init__(self,ROOT,people,personIndex):
@@ -39,16 +40,19 @@ class personWindow(Toplevel):
 		self.elements["itemsAvailable"]=Listbox(self.rootFrame)
 		self.elements["itemsAvailable"].grid(row=2,column=1,sticky=N+S,rowspan=999)
 
-		self.elements["itemInfoPicture"]=Label(self.rootFrame,text="PICTURE WILL GO HERE")
-		self.elements["itemInfoPicture"].grid(row=0,column=2,rowspan=4)
 		self.elements["itemInfoName"]=Label(self.rootFrame,text="NAME GOES HERE")
-		self.elements["itemInfoName"].grid(row=3,column=2)
+		self.elements["itemInfoName"].grid(row=2,column=2)
 		self.elements["itemInfoQuantityLeft"]=Label(self.rootFrame,text="Number Left: 0")
-		self.elements["itemInfoQuantityLeft"].grid(row=4,column=2)
+		self.elements["itemInfoQuantityLeft"].grid(row=3,column=2)
 		self.elements["itemInfoQuantityTotal"]=Label(self.rootFrame,text="Total: OVER 9000!!!")
-		self.elements["itemInfoQuantityTotal"].grid(row=5,column=2)
+		self.elements["itemInfoQuantityTotal"].grid(row=4,column=2)
 		self.elements["itemInfoTags"]=Label(self.rootFrame,text="Tags:\nTag1\nTag2\nTag3")
-		self.elements["itemInfoTags"].grid(row=6,column=2)
+		self.elements["itemInfoTags"].grid(row=5,column=2)
+		self.elements["itemInfoPicture"]=Label(self.rootFrame,text="PICTURE WILL GO HERE")
+		self.elements["itemInfoPicture"].grid(row=6,column=2)
+
+		self.temp=ImageTk.PhotoImage(file="Image-not-found.gif")
+		self.elements["itemInfoPicture"].config(image=self.temp)
 
 	def delete(self,ignore=""):
 		self.grab_release()
