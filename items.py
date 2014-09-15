@@ -90,5 +90,16 @@ class items:
 		
 		self.update_items()
 				
-	def add_item(self,name,quantity,used,tags):
+	def add_item(self,name,quantity='',used='',tags=''):
 		self.modify_item(name,quantity,used,tags) #got lazy, but hey, it does the job
+
+	def delete_item(self,name):
+		if type(name)==type({}):
+			name=name['name']
+		if not type(name)==type(""):
+			raise TypeError("Cannot handle type "+str(type(name))+"  --  "+str(name))
+		os.remove("items/"+name+'.info')
+		for x in xrange(len(self.items)): #remove it from our list so that we dont 
+			if self.items[x]['name']==name: 
+				del self.items[x]
+				break
