@@ -162,6 +162,9 @@ class people:
 					state=line.split('=')[2][:-1]
 					line=line[1:]
 					self.people[-1]['items'].append([item,date,state])
+
+		#sort people by their name
+		self.people.sort(key=lambda a:a['name'])
 				
 
 	def emailPerson(self,person,message=""):
