@@ -129,6 +129,7 @@ class adminWindowBase(Toplevel):
 			for item in person['items']:
 				if item[0]==self.searchedItems[index]['name']:
 					print "UNABLE TO DELETE "+item[0]+" BECAUSE SOMEONE HAS ONE CHECKED OUT"
+					return
 		self.items.delete_item(self.searchedItems[index])
 
 	def delete(self):
