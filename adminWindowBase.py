@@ -49,18 +49,25 @@ class adminWindowBase(Toplevel):
 		self.elements['removeItemButton']=Button(self.rootFrame,text="Remove Item",command=self.removeItem_call)
 		self.elements['removeItemButton'].grid(row=3,column=3,rowspan=2,sticky=E)
 		self.elements["addItemButton"]=Button(self.rootFrame,text="Add Items")
-		self.elements['addItemButton'].grdi(row=5,column=3,sticky=E)
+		self.elements['addItemButton'].grid(row=5,column=3,sticky=E)
 
 		self.itemImage=ImageTk.PhotoImage(file="Image-not-found.gif")
 		self.elements["itemInfoPicture"].config(image=self.itemImage)
 
 		#PERSON ADMIN AREA
 		self.elements["peopleList"]=Listbox(self.rootFrame)
-		self.elements['peopleList'].grid(row=1000,column=0,sticky=N+S+W) #yes i mean 1000
+		self.elements['peopleList'].grid(row=1000,column=0,rowspan=999,sticky=N+S+W) #yes i mean row=1000
+		self.elements['peopleList'].bind("<Button-1>",self.displayPersonInfo_call)
 		self.elements['personInfoName']=Label(self.rootFrame,text="Name Goes Here")
 		self.elements['personInfoName'].grid(row=1000,column=2)
 		self.elements['personInfoRoom']=Label(self.rootFrame,text="Room: Here")
-		self.elements['personInfoRoom'].grid(row=1002,column=2)
+		self.elements['personInfoRoom'].grid(row=1001,column=2)
+		self.elements['personInfoIdNumber']=Label(self.rootFrame,text="IDNumber: Here")
+		self.elements['personInfoIdNumber'].grid(row=1002,column=2)
+		self.elements['personInfoPhone']=Label(self.rootFrame,text="PHONE NUMBER HERE")
+		self.elements['personInfoPhone'].grid(row=1003,column=2)
+		self.elements['personInfoEmail']=Label(self.rootFrame,text="Email Here")
+		self.elements['personInfoEmail'].grid(row=1004,column=2)
 
 		#initialize the lists
 		self.items=items()
@@ -113,6 +120,7 @@ class adminWindowBase(Toplevel):
 				self.elements['peopleList'].itemconfig(END,bg='green')
 			###else: white background because we have no need to worry about this person
 
+#ITEM SPECIFIC THINGS
 	def displayInfoItem_call(self,ignore=""):self.root.after(1,self.displayInfoItem)
 	def displayInfoItem(self,ignore=""):
 		index=int(self.elements['itemsList'].curselection()[0])
@@ -139,6 +147,16 @@ class adminWindowBase(Toplevel):
 					return #so that it never touches the bottom
 		self.items.delete_item(self.searchedItems[index])
 		self.redrawLists()
+
+#PEOPLE SPECIFIC THINGS
+	def displayPersonInfo_call(self,ignore=""):self.root.after(1,self.displayPersonInfo)
+	def displayPersonInfo(self,ignore=""):
+		index=int(self.elements['peopleList'].curselection()[0])
+		self.elements['personInfoName'].config(text=self.searchedPeople[index]['name'])
+		self.elements['personInfoEmail'].config(text=self.searchedPeople[index]['email'])
+		self.elements['personInfoPhone'].config(text=self.searchedPeople[index]['phoneNumber'])
+		self.elements['personInfoRoom'].config(text="Room: "+self.searchedPeople[index]['room'])
+		self.elements['personInfoIdNumber'].config(text=self.searchedPeople[index]['IDNumber'])
 
 	def delete(self):
 		self.grab_release()
