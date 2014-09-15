@@ -1,5 +1,6 @@
 from Tkinter import *
 from selectPersonWindow import personSelectWindow
+from adminWindowBase import adminWindowBase
 
 global root
 root=Tk()
@@ -18,5 +19,9 @@ buttonAdmin.grid(row=2,column=0)
 def selectPerson(ignore=""):
 	personWindow=personSelectWindow(root)
 buttonPerson.config(command=selectPerson)
+
+def administration(ignore=""):
+	if entryAdmin.get()=="37and34":adminWindow=adminWindowBase(root)
+buttonAdmin.config(command=administration)
 
 root.mainloop()
