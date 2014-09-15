@@ -55,7 +55,7 @@ class people:
 
 	def isOverdue(self,item):
 		if not type(item)==type([]):
-			raise TypeError
+			raise TypeError("please pass in an item from a person. i need the date from it")
 		today=datetime.today()
 		itemTime=datetime.strptime(item[1],"%m-%d-%Y")
 		if (item[2]=='out' or item[2]=='damaged') and itemTime<today:

@@ -1,6 +1,7 @@
 from Tkinter import *
 from items import items
 from people import people
+from adminItemModifyWindow import adminItemModify
 from PIL import Image,ImageTk
 
 class adminWindowBase(Toplevel):
@@ -44,7 +45,7 @@ class adminWindowBase(Toplevel):
 		self.elements["itemInfoPicture"]=Label(self.rootFrame,text="PICTURE WILL GO HERE")
 		self.elements["itemInfoPicture"].grid(row=6,column=2,columnspan=2)
 
-		self.elements['modifyItemButton']=Button(self.rootFrame,text="Modify Item")
+		self.elements['modifyItemButton']=Button(self.rootFrame,text="Modify Item",command=self.modifyItem_call)
 		self.elements['modifyItemButton'].grid(row=1,column=3,rowspan=2,sticky=E)
 		self.elements['removeItemButton']=Button(self.rootFrame,text="Remove Item",command=self.removeItem_call)
 		self.elements['removeItemButton'].grid(row=3,column=3,rowspan=2,sticky=E)
@@ -129,7 +130,7 @@ class adminWindowBase(Toplevel):
 		self.elements['itemInfoQuantityTotal'].config(text="Total: "+self.searchedItems[index]['quantity'])
 		self.elements['itemInfoDaysAllowed'].config(text="Days Allowed: "+self.searchedItems[index]['daysAllowed'])
 		self.elements['itemInfoTags'].config(text="Tags:\n"+self.searchedItems[index]['tags'])
-
+		
 		try:
 			temp=Image.open("images/"+self.searchedItems[index]['name']+".jpg")
 			self.itemImage=ImageTk.PhotoImage(temp.resize((int(temp.size[0]*(300.0/temp.size[1])),300),Image.ANTIALIAS))
@@ -147,6 +148,11 @@ class adminWindowBase(Toplevel):
 					return #so that it never touches the bottom
 		self.items.delete_item(self.searchedItems[index])
 		self.redrawLists()
+
+	def modifyItem_call(self,ignore=""):self.root.after(1,self.modifyItem)
+	def modifyItem(self,ignore=""):
+		index=int(self.elements['itemsList'].curselection()[0])
+		self.itemWindow=adminItemModify(self,self.items[index])
 
 #PEOPLE SPECIFIC THINGS
 	def displayPersonInfo_call(self,ignore=""):self.root.after(1,self.displayPersonInfo)
