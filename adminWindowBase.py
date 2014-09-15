@@ -47,7 +47,9 @@ class adminWindowBase(Toplevel):
 		self.elements['modifyItemButton']=Button(self.rootFrame,text="Modify Item")
 		self.elements['modifyItemButton'].grid(row=1,column=3,rowspan=2,sticky=E)
 		self.elements['removeItemButton']=Button(self.rootFrame,text="Remove Item",command=self.removeItem_call)
-		self.elements['removeItemButton'].grid(row=4,column=3,rowspan=2,sticky=E)
+		self.elements['removeItemButton'].grid(row=3,column=3,rowspan=2,sticky=E)
+		self.elements["addItemButton"]=Button(self.rootFrame,text="Add Items")
+		self.elements['addItemButton'].grdi(row=5,column=3,sticky=E)
 
 		self.itemImage=ImageTk.PhotoImage(file="Image-not-found.gif")
 		self.elements["itemInfoPicture"].config(image=self.itemImage)
@@ -55,7 +57,12 @@ class adminWindowBase(Toplevel):
 		#PERSON ADMIN AREA
 		self.elements["peopleList"]=Listbox(self.rootFrame)
 		self.elements['peopleList'].grid(row=1000,column=0,sticky=N+S+W) #yes i mean 1000
+		self.elements['personInfoName']=Label(self.rootFrame,text="Name Goes Here")
+		self.elements['personInfoName'].grid(row=1000,column=2)
+		self.elements['personInfoRoom']=Label(self.rootFrame,text="Room: Here")
+		self.elements['personInfoRoom'].grid(row=1002,column=2)
 
+		#initialize the lists
 		self.items=items()
 		self.searchedItems=[]
 		for x in self.items:
@@ -129,8 +136,9 @@ class adminWindowBase(Toplevel):
 			for item in person['items']:
 				if item[0]==self.searchedItems[index]['name']:
 					print "UNABLE TO DELETE "+item[0]+" BECAUSE SOMEONE HAS ONE CHECKED OUT"
-					return
+					return #so that it never touches the bottom
 		self.items.delete_item(self.searchedItems[index])
+		self.redrawLists()
 
 	def delete(self):
 		self.grab_release()
