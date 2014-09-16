@@ -7,6 +7,13 @@ from email.MIMEText import MIMEText
 
 class people:
 	def __init__(self):
+		self.neededAttributes={'name':'JohnDoe',
+							"IDNumber":'0000',
+							'phoneNumber':'0000',
+							'premiumStatus':"0",
+							'room':"None",
+							'email':"None"
+							}
 		self.update_people()
 
 	def search_people(self, terms):
@@ -42,21 +49,14 @@ class people:
 
 	def validatePerson(self,person):
 		if not type(person)==type({}):person=self[person]
-		neededAttributes=['name',"IDNumber",'phoneNumber','premiumStatus','room','email']
-		for x in neededAttributes:
+		for x in self.neededAttributes:
 			if not x in person: return False
 		return True
 
 	def fixInvalidPerson(self,person):
 		if not type(person)==type({}):person=self[person]
-		neededAttributes={'name':'JohnDoe',
-						"IDNumber":'0000',
-						'phoneNumber':'0000',
-						'premiumStatus':"0",
-						'room':"None",
-						'email':"None"}
-		for x in neededAttributes:
-			if not x in person: person[x]=neededAttributes[x]
+		for x in self.neededAttributes:
+			if not x in person: person[x]=self.neededAttributes[x]
 		self.modify_person(person)
 		return person
 

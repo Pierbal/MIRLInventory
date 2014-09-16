@@ -2,7 +2,14 @@ import os
 
 class items:
 	def __init__(self):
-		self.items=[]
+		self.neededAttributes={'used':"0",
+							'premiumStatus':'0',
+							'name':'None',
+							'tags':'',
+							'price':'5.0',
+							"daysAllowed":'4',
+							'quantity':'1'
+							}
 		self.update_items()
 
 	def __iter__(self):
@@ -17,6 +24,19 @@ class items:
 					return item
 			return None
 		raise TypeError("cannont handle "+str(type(index))+ "  :  "+str(index))
+
+	def validateItem(self,item):
+		if not type(item)==type({}):item=self[item]
+		for x in self.neededAttributes:
+			if not x in item: return False
+		return True
+
+	def fixInvalidPerson(self,item):
+		if not type(item)==type({}):item=self[item]
+		for x in self.neededAttributes:
+			if not x in item: item[x]=self.neededAttributes[x]
+		self.modify_item(item)
+		return item
 
 	def update_items(self):
 		files=[]
@@ -33,6 +53,9 @@ class items:
 				key=line.split('=')[0]
 				value=line.split('=')[1][:-1]
 				self.items[-1][key]=value
+			if not self.validateItem(self.items[-1]):
+				print "invalid item "+self.items[-1]['name']
+				self.items[-1]=self.fixInvalidPerson(self.items[-1])
 
 		self.items.sort(key=lambda a: a['name'])
 
