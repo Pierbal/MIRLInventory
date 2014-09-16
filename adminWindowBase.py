@@ -152,7 +152,10 @@ class adminWindowBase(Toplevel):
 	def modifyItem_call(self,ignore=""):self.root.after(1,self.modifyItem)
 	def modifyItem(self,ignore=""):
 		index=int(self.elements['itemsList'].curselection()[0])
-		self.itemWindow=adminItemModify(self,self.items[index])
+		adminItemModify(self,self.items[index])
+		self.searchItems()
+		self.elements['itemsList'].select_set(index)
+		self.displayInfoItem()
 
 #PEOPLE SPECIFIC THINGS
 	def displayPersonInfo_call(self,ignore=""):self.root.after(1,self.displayPersonInfo)

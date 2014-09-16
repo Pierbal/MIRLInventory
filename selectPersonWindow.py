@@ -65,12 +65,16 @@ class personSelectWindow(Toplevel):
 	def modifyPersonInfo_call(self,ignore=""):self.root.after(1,self.modifyPersonInfo)
 	def modifyPersonInfo(self,ignore=""):
 		index=int(self.elements["personList"].curselection()[0])
-		self.modifyPerson=modifyPersonInfoWindow(self,self.people,index)
+		modifyPersonInfoWindow(self,self.people,index)
+		self.elements['personList'].select_set(index)
+		self.displayPerson()
 
 	def modifyPersonItems_call(self,ignore=""):self.root.after(1,self.modifyPersonItems)
 	def modifyPersonItems(self,ignore=""):
 		index=int(self.elements["personList"].curselection()[0])
-		self.modifyPerson=personWindow(self,self.people,index)
+		personWindow(self,self.people,index)
+		self.elements['personList'].select_set(index)
+		self.displayPerson()
 
 	def delete(self,ignore=""):
 		self.grab_release()

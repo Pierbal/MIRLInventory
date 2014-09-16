@@ -2,6 +2,8 @@ from Tkinter import *
 from items import items
 from people import people
 from PIL import Image,ImageTk
+from tkFileDialog import askopenfilename
+import shutil
 
 class adminItemModify(Toplevel):
 	def __init__(self,ROOT,item):
@@ -49,12 +51,15 @@ class adminItemModify(Toplevel):
 		self.elements['tagsEntry']=Entry(self.rootFrame)
 		self.elements['tagsEntry'].grid(row=5,column=1,sticky=E+W)
 		self.elements["tagsEntry"].insert(0,self.item['tags'])
+
 		self.elements['premiumLabel']=Label(self.rootFrame,text="Premium Item")
 		self.elements['premiumLabel'].grid(row=6,column=0,sticky=W)
-		temp=self.item['premiumStatus']
-		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="THIS IS SOMETHING",variable=temp,onvalue='1',offvalue='0')
+		temp=StringVar()
+		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="",variable=temp,onvalue='1',offvalue='0')
 		self.elements['premiumEntry'].grid(row=6,column=1)
 		self.elements['premiumEntry'].state=temp
+		if self.item['premiumStatus']=='1':self.elements['premiumEntry'].select()
+		else:self.elements['premiumEntry'].deselect()
 
 		self.elements['imageLabel']=Label(self.rootFrame)
 		self.elements['imageLabel'].grid(row=1,column=3,rowspan=7,columnspan=2)
@@ -83,12 +88,14 @@ class adminItemModify(Toplevel):
 		self.elements['imageLabel'].config(image=self.image)
 
 	def importImage(self):
-		pass
+		filename=askopenfilename(parent=self,defaultextension='.jpg',initialdir='/home',title='Select a JPEG Image')
+		shutil.copy(filename,'images/'+self.item['name']+'.jpg')
+		self.updateImage()
 
 	def applyChanges(self):
-		self.item['premiumStatus']=self.elements['premiumEntry'].state
+		self.item['premiumStatus']=self.elements['premiumEntry'].state.get()
 		self.item['quantity']=self.elements['quantityEntry'].get()
-		self.item['daysAllowedEntry']=self.elements['daysAllowedEntry'].get()
+		self.item['daysAllowed']=self.elements['daysAllowedEntry'].get()
 		self.item['price']=self.elements['priceEntry'].get()
 		self.item["tags"]=self.elements['tagsEntry'].get()
 		self.items=items()
