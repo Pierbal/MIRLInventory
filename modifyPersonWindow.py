@@ -37,28 +37,30 @@ class personWindow(Toplevel):
 		self.elements["itemsHave"].bind("<Button-1>",self.displayItemHaveInfo_call)
 
 		self.elements["checkoutButton"]=Button(self.rootFrame,text="Check-out Item",command=self.checkoutItem_call)
-		self.elements["checkoutButton"].grid(row=0,column=1)
+		self.elements["checkoutButton"].grid(row=0,column=2)
 		self.elements["searchEntry"]=Entry(self.rootFrame)
-		self.elements["searchEntry"].grid(row=1,column=1,sticky=E+W)
+		self.elements["searchEntry"].grid(row=1,column=2,sticky=E+W)
 		self.elements["searchEntry"].bind("<Key>",self.searchItems_call)
 		self.elements["itemsAvailable"]=Listbox(self.rootFrame)
-		self.elements["itemsAvailable"].grid(row=2,column=1,sticky=N+S,rowspan=999)
+		self.elements["itemsAvailable"].grid(row=2,column=2,sticky=N+S,rowspan=999)
 		self.elements["itemsAvailable"].bind("<Button-1>",self.displayItemInfo_call)
 
+		self.elements['customMessageLabel']=Label(self.rootFrame,text="Custom Email Message: ")
+		self.elements['customMessageLabel'].grid(row=0,column=4,sticky=W)
 		self.elements['customMessageEntry']=Entry(self.rootFrame)
-		self.elements['customMessageEntry'].grid(row=0,column=2)
+		self.elements['customMessageEntry'].grid(row=0,column=5,sticky=W+E)
 		self.elements["itemInfoName"]=Label(self.rootFrame,text="NAME GOES HERE")
-		self.elements["itemInfoName"].grid(row=2,column=2)
+		self.elements["itemInfoName"].grid(row=2,column=4,columnspan=2)
 		self.elements["itemInfoQuantityLeft"]=Label(self.rootFrame,text="Number Left: 0")
-		self.elements["itemInfoQuantityLeft"].grid(row=3,column=2)
+		self.elements["itemInfoQuantityLeft"].grid(row=3,column=4,columnspan=2)
 		self.elements["itemInfoQuantityTotal"]=Label(self.rootFrame,text="Total: OVER 9000!!!")
-		self.elements["itemInfoQuantityTotal"].grid(row=4,column=2)
+		self.elements["itemInfoQuantityTotal"].grid(row=4,column=4,columnspan=2)
 		self.elements["itemInfoTags"]=Label(self.rootFrame,text="Tags:\nTag1\nTag2\nTag3")
-		self.elements["itemInfoTags"].grid(row=5,column=2)
+		self.elements["itemInfoTags"].grid(row=5,column=4,columnspan=2)
 		self.elements["itemInfoDaysAllowed"]=Label(self.rootFrame,text="Days Allowed: 555")
-		self.elements["itemInfoDaysAllowed"].grid(row=6,column=2)
+		self.elements["itemInfoDaysAllowed"].grid(row=6,column=4,columnspan=2)
 		self.elements["itemInfoPicture"]=Label(self.rootFrame,text="PICTURE WILL GO HERE")
-		self.elements["itemInfoPicture"].grid(row=7,column=2)
+		self.elements["itemInfoPicture"].grid(row=7,column=4,columnspan=2)
 
 		self.itemImage=ImageTk.PhotoImage(file="Image-not-found.gif")
 		self.elements["itemInfoPicture"].config(image=self.itemImage)
@@ -81,6 +83,15 @@ class personWindow(Toplevel):
 
 		self.elements["itemsAvailable"].select_set(0)
 		self.displayItemInfo()
+
+		#scrollbars
+		self.elements['itemsHaveScroll']=Scrollbar(self.rootFrame,command=self.elements['itemsHave'].yview)
+		self.elements['itemsHaveScroll'].grid(row=2,column=1,rowspan=999,sticky=N+S+W)
+		self.elements['itemsHave'].config(yscrollcommand=self.elements['itemsHaveScroll'].set)
+
+		self.elements['itemsAvailableScroll']=Scrollbar(self.rootFrame,command=self.elements['itemsAvailable'].yview)
+		self.elements['itemsAvailableScroll'].grid(row=2,column=3,rowspan=999,sticky=N+S+W)
+		self.elements['itemsAvailable'].config(yscrollcommand=self.elements['itemsAvailableScroll'].set)
 
 	def displayItemHaveInfo_call(self,ignore=""):self.root.after(1,self.displayItemHaveInfo)
 	def displayItemHaveInfo(self,ignore=""):
