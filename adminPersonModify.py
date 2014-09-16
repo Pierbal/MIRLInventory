@@ -46,6 +46,15 @@ class adminPersonModify(Toplevel):
 		self.elements['emailEntry'].grid(row=4,column=1,sticky=E+W)
 		self.elements['emailEntry'].insert(0,self.person['email'])
 
+		self.elements['premiumLabel']=Label(self.rootFrame,text="Premium Status: ")
+		self.elements['premiumLabel'].grid(row=5,column=0,sticky=W)
+		temp=StringVar()
+		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="",variable=temp,onvalue='1',offvalue='0')
+		self.elements['premiumEntry'].grid(row=5,column=1,sticky=W)
+		self.elements['premiumEntry'].state=temp
+		if self.item['premiumStatus']=='1':self.elements['premiumEntry'].select()
+		else:self.elements['premiumEntry'].deselect()
+
 		self.elements['currentItemsLabel']=Label(self.rootFrame,text="Checked Out")
 		self.elements['currentItemsLabel'].grid(row=0,column=2)
 		self.elements['currentItems']=Listbox(self.rootFrame)

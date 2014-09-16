@@ -44,6 +44,14 @@ class adminAddPerson(Toplevel):
 		self.elements['emailEntry']=Entry(self.rootFrame)
 		self.elements['emailEntry'].grid(row=4,column=1,sticky=E+W)
 
+		self.elements['premiumLabel']=Label(self.rootFrame,text="Premium Status: ")
+		self.elements['premiumLabel'].grid(row=5,column=0,sticky=W)
+		temp=StringVar()
+		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="",variable=temp,onvalue='1',offvalue='0')
+		self.elements['premiumEntry'].grid(row=5,column=1,sticky=W)
+		self.elements['premiumEntry'].state=temp
+		self.elements['premiumEntry'].deselect()
+
 		self.elements['applyButton']=Button(self.rootFrame,text="  APPLY  ",command=self.applyChanges)
 		self.elements['applyButton'].grid(row=10,column=0,columnspan=2)
 
