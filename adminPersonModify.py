@@ -107,7 +107,8 @@ class adminPersonModify(Toplevel):
 			except:return
 		self.elements['itemInfoDate'].config(text="Date: "+item[1])
 		item=self.items[item[0]]
-		self.elements['itemInfoPrice'].config(text="Price: "+item['price'])
+		if item=None:self.elements['itemInfoPrice'].config(text="Removed Item")
+		else:self.elements['itemInfoPrice'].config(text="Price: "+item['price'])
 
 
 	def applyChanges(self,ignore=""):
