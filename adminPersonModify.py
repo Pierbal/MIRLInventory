@@ -105,7 +105,7 @@ class adminPersonModify(Toplevel):
 				index=int(self.elements['pastItems'].curselection()[0])
 				item=self.people.pastItems(self.person)[index]
 			except:return
-		self.elements['itemInfoDate'].confgi(text="Date: "+item[1])
+		self.elements['itemInfoDate'].config(text="Date: "+item[1])
 		item=self.items[item[1]]
 		self.elements['itemInfoPrice'].config(text="Price: "+item['price'])
 
