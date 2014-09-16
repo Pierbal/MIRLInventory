@@ -89,7 +89,7 @@ class adminPersonModify(Toplevel):
 		self.person['room']=self.elements['roomEntry'].get()
 		self.person['phoneNumber']=self.elements['phoneEntry'].get()
 		self.person['email']=self.elements['emailEntry'].get()
-		self.person['premiumStatus']=self.elements['premiumEntry'].status.get()
+		self.person['premiumStatus']=self.elements['premiumEntry'].state.get()
 		self.people.modify_person(self.person)
 		self.destroy()
 
