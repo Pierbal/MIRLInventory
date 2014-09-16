@@ -51,13 +51,14 @@ class people:
 		if not type(person)==type({}):person=self[person]
 		neededAttributes={'name':'JohnDoe',
 						"IDNumber":'0000',
-						'phoneNumber':'8675309',
+						'phoneNumber':'0000',
 						'premiumStatus':"0",
 						'room':"None",
 						'email':"None"}
 		for x in neededAttributes:
 			if not x in person: person[x]=neededAttributes[x]
-		return person
+		self.modify_person(person)
+		self.update_people()
 
 	def __getitem__(self,entry):
 		if type(entry)==type(0): #if an integer
@@ -181,7 +182,9 @@ class people:
 					state=line.split('=')[2][:-1]
 					line=line[1:]
 					self.people[-1]['items'].append([item,date,state])
-			if not self.validatePerson(self.people[-1]): print "invalid person "+self.people[-1]['name']
+			if not self.validatePerson(self.people[-1]):
+				print "invalid person "+self.people[-1]['name']
+				self.fixInvalidPerson(self.people[-1])
 
 		#sort people by their name
 		self.people.sort(key=lambda a:a['name'])
