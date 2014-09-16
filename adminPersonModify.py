@@ -52,7 +52,7 @@ class adminPersonModify(Toplevel):
 		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="",variable=temp,onvalue='1',offvalue='0')
 		self.elements['premiumEntry'].grid(row=5,column=1,sticky=W)
 		self.elements['premiumEntry'].state=temp
-		if self.item['premiumStatus']=='1':self.elements['premiumEntry'].select()
+		if self.person['premiumStatus']=='1':self.elements['premiumEntry'].select()
 		else:self.elements['premiumEntry'].deselect()
 
 		self.elements['currentItemsLabel']=Label(self.rootFrame,text="Checked Out")
@@ -89,6 +89,7 @@ class adminPersonModify(Toplevel):
 		self.person['room']=self.elements['roomEntry'].get()
 		self.person['phoneNumber']=self.elements['phoneEntry'].get()
 		self.person['email']=self.elements['emailEntry'].get()
+		self.person['premiumStatus']=self.elements['premiumEntry'].status.get()
 		self.people.modify_person(self.person)
 		self.destroy()
 
