@@ -58,7 +58,7 @@ class people:
 		for x in neededAttributes:
 			if not x in person: person[x]=neededAttributes[x]
 		self.modify_person(person)
-		self.update_people()
+		return person
 
 	def __getitem__(self,entry):
 		if type(entry)==type(0): #if an integer
@@ -184,7 +184,7 @@ class people:
 					self.people[-1]['items'].append([item,date,state])
 			if not self.validatePerson(self.people[-1]):
 				print "invalid person "+self.people[-1]['name']
-				self.fixInvalidPerson(self.people[-1])
+				self.people[-1]=self.fixInvalidPerson(self.people[-1])
 
 		#sort people by their name
 		self.people.sort(key=lambda a:a['name'])
