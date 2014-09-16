@@ -59,15 +59,20 @@ class adminPersonModify(Toplevel):
 		self.elements['currentItemsLabel'].grid(row=0,column=2)
 		self.elements['currentItems']=Listbox(self.rootFrame)
 		self.elements["currentItems"].grid(row=1,column=2,rowspan=8,sticky=N+S)
+		self.elements["currentItems"].bind("<Button-1>",self.displayItem_call)
+		self.elements["currentItems"].bind("<Key>",self.displayItem_call)
 		self.elements['pastItemsLabel']=Label(self.rootFrame,text="Past Items")
 		self.elements['pastItemsLabel'].grid(row=0,column=4)
 		self.elements['pastItems']=Listbox(self.rootFrame)
 		self.elements['pastItems'].grid(row=1,column=4,rowspan=8,sticky=N+S)
+		self.elements["pastItems"].bind("<Button-1>",self.displayItem_call)
+		self.elements["pastItems"].bind("<Key>",self.displayItem_call)
 
 		self.elements['applyButton']=Button(self.rootFrame,text="  APPLY  ",command=self.applyChanges)
 		self.elements['applyButton'].grid(row=10,column=0,columnspan=2)
 
 		self.people=people()
+		self.items=items()
 		for x in self.people.dueItems(self.person):
 			self.elements['currentItems'].insert(END,x[0])
 			if self.people.isOverdue(x):
@@ -88,6 +93,22 @@ class adminPersonModify(Toplevel):
 		self.elements['pastItemsScroll']=Scrollbar(self.rootFrame,command=self.elements['pastItems'].yview)
 		self.elements['pastItemsScroll'].grid(row=1,column=5,rowspan=8,sticky=N+S+W)
 		self.elements['pastItems'].config(yscrollcommand=self.elements['pastItemsScroll'].set)
+
+	def displayItem_call(self,ignore=""):self.root.after(1,self.displayItem)
+	def displayItem(self,ignore=""):
+		index=0
+		try:
+			index=int(self.elements['currentItems'].curselection()[0])
+			item=self.people.dueItems(self.person)[index]
+		except:
+			try:
+				index=int(self.elements['pastItems'].curselection()[0])
+				item=self.people.pastItems(self.person)[index]
+			except:return
+		self.elements['itemInfoDate'].confgi(text="Date: "+item[1])
+		item=self.items[item[1]]
+		self.elements['itemInfoPrice'].config(text="Price: "+item['price'])
+
 
 	def applyChanges(self,ignore=""):
 		self.person['name']=self.elements['nameEntry'].get()
