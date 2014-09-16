@@ -42,14 +42,14 @@ class people:
 
 	def validatePerson(self,person):
 		if not type(person)==type({}):person=self[person]
-		neededAttributes['name',"IDNumber",'phoneNumber','premiumStatus','room','email']
+		neededAttributes=['name',"IDNumber",'phoneNumber','premiumStatus','room','email']
 		for x in neededAttributes:
 			if not x in person: return False
 		return True
 
 	def fixInvalidPerson(self,person):
 		if not type(person)==type({}):person=self[person]
-		neededAttributes{'name':'JohnDoe',
+		neededAttributes={'name':'JohnDoe',
 						"IDNumber":'0000',
 						'phoneNumber':'8675309',
 						'premiumStatus':"0",
