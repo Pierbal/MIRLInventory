@@ -34,6 +34,8 @@ class items:
 				value=line.split('=')[1][:-1]
 				self.items[-1][key]=value
 
+		self.items.sort(key=lambda a: a['name'])
+
 	def getitem(self,name):
 		if type(name)==type(""):
 			for item in self.items:

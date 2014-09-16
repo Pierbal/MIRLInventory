@@ -2,6 +2,7 @@ from Tkinter import *
 from items import items
 from people import people
 from adminItemModifyWindow import adminItemModify
+from adminAddItemWindow import adminAddItem
 from PIL import Image,ImageTk
 
 class adminWindowBase(Toplevel):
@@ -49,7 +50,7 @@ class adminWindowBase(Toplevel):
 		self.elements['modifyItemButton'].grid(row=1,column=3,rowspan=2,sticky=E)
 		self.elements['removeItemButton']=Button(self.rootFrame,text="Remove Item",command=self.removeItem_call)
 		self.elements['removeItemButton'].grid(row=3,column=3,rowspan=2,sticky=E)
-		self.elements["addItemButton"]=Button(self.rootFrame,text="Add Items")
+		self.elements["addItemButton"]=Button(self.rootFrame,text="Add Items",command=self.addItem_call)
 		self.elements['addItemButton'].grid(row=5,column=3,sticky=E)
 
 		self.itemImage=ImageTk.PhotoImage(file="Image-not-found.gif")
@@ -156,6 +157,12 @@ class adminWindowBase(Toplevel):
 		self.searchItems()
 		self.elements['itemsList'].select_set(index)
 		self.displayInfoItem()
+
+	def addItem_call(self,ignore=""):self.root.after(1,self.addItem)
+	def addItem(self,ignore=""):
+		adminAddItem(self)
+		self.items.update_items()
+		self.searchItems()
 
 #PEOPLE SPECIFIC THINGS
 	def displayPersonInfo_call(self,ignore=""):self.root.after(1,self.displayPersonInfo)
