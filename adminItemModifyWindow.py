@@ -52,11 +52,11 @@ class adminItemModify(Toplevel):
 		self.elements['tagsEntry'].grid(row=5,column=1,sticky=E+W)
 		self.elements["tagsEntry"].insert(0,self.item['tags'])
 
-		self.elements['premiumLabel']=Label(self.rootFrame,text="Premium Item")
+		self.elements['premiumLabel']=Label(self.rootFrame,text="Premium Item: ")
 		self.elements['premiumLabel'].grid(row=6,column=0,sticky=W)
 		temp=StringVar()
 		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="",variable=temp,onvalue='1',offvalue='0')
-		self.elements['premiumEntry'].grid(row=6,column=1)
+		self.elements['premiumEntry'].grid(row=6,column=1,sticky=W)
 		self.elements['premiumEntry'].state=temp
 		if self.item['premiumStatus']=='1':self.elements['premiumEntry'].select()
 		else:self.elements['premiumEntry'].deselect()

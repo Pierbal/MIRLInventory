@@ -40,6 +40,7 @@ class items:
 		if type(name)==type(""):
 			for item in self.items:
 				if item['name']==name: return item
+			return None
 		elif type(name)==type(0):
 			return self.items[name]
 		else:

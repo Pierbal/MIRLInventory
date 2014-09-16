@@ -54,7 +54,7 @@ class adminAddItem(Toplevel):
 		self.elements['premiumLabel'].grid(row=6,column=0,sticky=W)
 		temp=StringVar()
 		self.elements['premiumEntry']=Checkbutton(self.rootFrame,text="",variable=temp,onvalue='1',offvalue='0')
-		self.elements['premiumEntry'].grid(row=6,column=1)
+		self.elements['premiumEntry'].grid(row=6,column=1,sticky=W)
 		self.elements['premiumEntry'].state=temp
 		self.elements['premiumEntry'].deselect()
 

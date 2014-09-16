@@ -94,7 +94,7 @@ class people:
 		for item in person["items"]:
 			if item[2]=='out' or item[2]=='damaged':
 				dueItems.append(item)
-		return dueItems 
+		return dueItems
 
 	def pastItems(self,person=None):
 		if person==None:
@@ -165,6 +165,19 @@ class people:
 
 		#sort people by their name
 		self.people.sort(key=lambda a:a['name'])
+
+	def deletePerson(self,person):
+		if type(person)==type({}):
+			person=person['IDNumber']
+		if not type(person)==type(""):
+			raise TypeError("Did not send in a usable type "+str(type(person)))
+		#can assume we have the idnumber now
+		os.remove('people/'+person+'.info')
+		for p in xrange(len(self.people)):
+			if person==self.people[p]['IDNumber']:
+				del self.people[p]
+				break
+
 				
 
 	def emailPerson(self,person,message=""):
