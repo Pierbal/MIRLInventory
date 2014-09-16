@@ -24,7 +24,7 @@ class adminPersonModify(Toplevel):
 	def body(self):
 		self.elements={}
 		self.elements['idNumberLabel']=Label(self.rootFrame,text="ID Number: "+self.person['IDNumber'])
-		self.elements['idNumberLabel'].grid(row=0,column=0,sticky=W)
+		self.elements['idNumberLabel'].grid(row=0,column=0,columnspan=2)
 		self.elements['nameLabel']=Label(self.rootFrame,text="Name: ")
 		self.elements['nameLabel'].grid(row=1,column=0,sticky=W)
 		self.elements['nameEntry']=Entry(self.rootFrame)
@@ -74,6 +74,11 @@ class adminPersonModify(Toplevel):
 				self.elements['currentItems'].itemconfig(END,bg='red')
 		for x in self.people.pastItems(self.person):
 			self.elements['pastItems'].insert(END,x[0])
+
+		self.elements['itemInfoDate']=Label(self.rootFrame,text="Date: HERE!")
+		self.elements['itemInfoDate'].grid(row=10,column=2)
+		self.elements['itemInfoPrice']=Label(self.rootFrame,text="Price: HERE!")
+		self.elements['itemInfoPrice'].grid(row=10,column=4)
 
 		#scrollbars
 		self.elements['currentItemsScroll']=Scrollbar(self.rootFrame,command=self.elements['currentItems'].yview)
