@@ -5,6 +5,11 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
+#this is a complete pain
+#save an instance like self.people=people()
+#you can then use in for loops like    for person in self.people: print person['name']
+#also, you can get people like   self.person[27]    or more straight forward    self.person['Alex Harper']
+
 class people:
 	def __init__(self):
 		self.neededAttributes={'name':'JohnDoe',

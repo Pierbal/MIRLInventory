@@ -3,8 +3,12 @@ from modifyPersonWindow import personWindow
 from modifyPersonInfoWindow import modifyPersonInfoWindow
 from people import people
 
+#window to select a single person to work with
+#is not an admin thing
+
 class personSelectWindow(Toplevel):
 	def __init__(self,ROOT):
+		#magic
 		self.root=ROOT
 		Toplevel.__init__(self, self.root)
 		self.transient(self.root)
@@ -19,10 +23,13 @@ class personSelectWindow(Toplevel):
 
 		self.geometry("+%d+%d" % (self.root.winfo_rootx(),self.root.winfo_rooty()))
 
+		#more magic
 		self.wait_window(self)
 
 
 	def body(self):
+		#makes the elements of the body and binds them to things
+		#tried to keep the columns togeather and goes from top to bottom
 		self.elements={}
 		self.elements["personList"]=Listbox(self.rootFrame)
 		self.elements["personList"].grid(row=0,column=0,rowspan=999,sticky=N+S+W)
@@ -51,6 +58,7 @@ class personSelectWindow(Toplevel):
 
 	def displayPerson_call(self,ignore=""):self.root.after(1,self.displayPerson)
 	def displayPerson(self,ignore=""):
+		#gives basic information about the person when clicked on
 		index=int(self.elements["personList"].curselection()[0])
 		person=self.people[index]
 		self.elements["nameLabel"].config(text=person['name'])
@@ -64,6 +72,7 @@ class personSelectWindow(Toplevel):
 
 	def modifyPersonInfo_call(self,ignore=""):self.root.after(1,self.modifyPersonInfo)
 	def modifyPersonInfo(self,ignore=""):
+		#opens a window that modifies some values of the person. Protects some values still such as premium status
 		index=int(self.elements["personList"].curselection()[0])
 		modifyPersonInfoWindow(self,self.people,index)
 		self.elements['personList'].select_set(index)
@@ -71,6 +80,7 @@ class personSelectWindow(Toplevel):
 
 	def modifyPersonItems_call(self,ignore=""):self.root.after(1,self.modifyPersonItems)
 	def modifyPersonItems(self,ignore=""):
+		#opens a window to add or remove items for a person
 		index=int(self.elements["personList"].curselection()[0])
 		personWindow(self,self.people,index)
 		self.elements['personList'].select_set(index)

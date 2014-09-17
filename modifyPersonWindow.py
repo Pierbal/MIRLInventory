@@ -4,6 +4,9 @@ from items import items
 from PIL import Image,ImageTk
 from datetime import datetime,timedelta
 
+#for a single person it will checkin or out items
+#it will send a new email to the person after changing any status
+
 class personWindow(Toplevel):
 	def __init__(self,ROOT,people,personIndex):
 		self.people=people
@@ -183,6 +186,6 @@ class personWindow(Toplevel):
 			if item["used"]==item["quantity"]:self.elements['itemsAvailable'].itemconfig(END,bg='red')
 
 	def delete(self,ignore=""):
-		if self.modifiedItems:self.people.emailPerson(self.person,self.elements["customMessageEntry"].get())
+		if self.modifiedItems:self.people.emailPerson(self.person,self.elements["customMessageEntry"].get()) #email the person
 		self.grab_release()
 		self.destroy()
