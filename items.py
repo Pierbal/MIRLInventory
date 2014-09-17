@@ -1,5 +1,8 @@
 import os
 
+#magic in here
+#see people to see the concept of use
+
 class items:
 	def __init__(self):
 		self.neededAttributes={'used':"0",
