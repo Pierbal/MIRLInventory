@@ -1,8 +1,9 @@
-name=Dr Choi
+premiumStatus=0
+room=EGC Electrical Suite
 IDNumber=No Need
 phoneNumber=None
 email=none
-room=EGC Electrical Suite
+name=Dr Choi
 items:
 hammer=04-23-2014=out
 hammer=04-23-2014=out

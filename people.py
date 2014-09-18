@@ -62,7 +62,7 @@ class people:
 		if not type(person)==type({}):person=self[person]
 		for x in self.neededAttributes:
 			if not x in person: person[x]=self.neededAttributes[x]
-		self.modify_person(person)
+		self.modify_person_noUpdate(person) #write changes to file
 		return person
 
 	def __getitem__(self,entry):
@@ -160,6 +160,32 @@ class people:
 			temp.close()
 		self.update_people()
 
+	def modify_person_noUpdate(self,IDNumber,keys={}):
+		#note that this is the exact same as the simular named method above. This IS NECISSARY STILL
+		#This is here to fix the problem of there being person duplication when fixing invalid people
+		#the method above calls the self.update_people() method and so it parses files twice and adds 
+		#more people to the self.people list. This here is functionally identical except that it will
+		#NOT call the update method
+		if type(IDNumber)==type({}): #if you pass in a dict then it will do the work still
+			temp=open('people/'+IDNumber["IDNumber"]+'.info','w') #NOTE!: IDNumber is really the person dict
+			for x in IDNumber:
+				if x=='items':
+					continue
+				temp.write(x+'='+IDNumber[x]+'\n')
+			temp.write("items:\n")
+			for item in IDNumber["items"]:
+				temp.write(item[0]+'='+item[1]+'='+item[2]+'\n')
+			temp.close()
+		else:
+			temp=open('people/'+str(IDNumber)+'.info','w')
+			for x in keys:
+				if x=='items': continue
+				temp.write(x+'='+keys[x])
+			temp.write('items:\n')
+			for item in items:
+				temp.write(item[0]+'='+item[1]+'\n')
+			temp.close()
+
 	def update_people(self):
 		people=[]
 		for x in os.walk('people'):
@@ -185,7 +211,7 @@ class people:
 					item=line.split('=')[0]
 					date=line.split('=')[1]
 					state=line.split('=')[2][:-1]
-					line=line[1:]
+					line=line[1:] #remove the line since we got the info already
 					self.people[-1]['items'].append([item,date,state])
 			if not self.validatePerson(self.people[-1]):
 				print "invalid person "+self.people[-1]['name']

@@ -80,6 +80,7 @@ class personWindow(Toplevel):
 		self.items=items()
 		self.searchedItems=[]
 		for item in self.items:
+			if item['premiumStatus']=='1' and self.person['premiumStatus']=='0':continue #if it is a premium and you are not a premium member, then skip it
 			self.elements['itemsAvailable'].insert(END,item['name'])
 			self.searchedItems.append(item)
 			if item["used"]==item["quantity"]:self.elements['itemsAvailable'].itemconfig(END,bg='red')
@@ -123,6 +124,7 @@ class personWindow(Toplevel):
 		self.elements["itemsAvailable"].delete(0,END)
 		self.searchedItems=[]
 		for item in self.items:
+			if item['premiumStatus']=='1' and self.person['premiumStatus']=='0':continue #if it is a premium and you are not a premium member, then skip it
 			hasAllTerms=True
 			for term in terms:
 				if not (term in item['tags'] or term in item['name']):
