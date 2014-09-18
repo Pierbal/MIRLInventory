@@ -10,10 +10,12 @@ root=Tk()
 
 def exitProgram(ignore=""):root.quit()
 root.protocol("WM_DELETE_WINDOW",exitProgram)
+root.rowconfigure(0,weight=1)
+root.columnconfigure(0,weight=1)
 
 #body
 buttonPerson=Button(root,text="Person Selection")
-buttonPerson.grid(row=0,column=0)
+buttonPerson.grid(row=0,column=0,sticky=N+S+E+W,padx=3,pady=3)
 entryAdmin=Entry(root)
 entryAdmin.grid(row=1,column=0)
 buttonAdmin=Button(root,text="Admin Window")
@@ -28,5 +30,11 @@ buttonPerson.config(command=selectPerson)
 def administration(ignore=""):
 	if entryAdmin.get()=="37and34":adminWindow=adminWindowBase(root)
 buttonAdmin.config(command=administration)
+
+def dynamicResizing(ignore=''):
+	factor=buttonPerson.winfo_height()/2
+	if factor>buttonPerson.winfo_width()/10:factor=buttonPerson.winfo_width()/10
+	buttonPerson.config(font=("Ariel",factor))
+root.bind("<Configure>",dynamicResizing)
 
 root.mainloop()
