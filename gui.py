@@ -9,7 +9,9 @@ global root
 root=Tk()
 
 def exitProgram(ignore=""):root.quit()
-root.protocol("WM_DELETE_WINDOW",exitProgram)
+def ignoringAnything(ignore='yes'):pass
+root.bind("<Control-q>",exitProgram)
+root.protocol("WM_DELETE_WINDOW",ignoringAnything)
 root.rowconfigure(0,weight=1)
 root.columnconfigure(0,weight=1)
 
