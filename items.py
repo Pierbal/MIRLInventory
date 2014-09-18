@@ -11,6 +11,7 @@ class items:
 							'tags':'',
 							'price':'5.0',
 							"daysAllowed":'4',
+							"hoursAllowed":"0",
 							'quantity':'1'
 							}
 		self.update_items()
@@ -38,7 +39,7 @@ class items:
 		if not type(item)==type({}):item=self[item]
 		for x in self.neededAttributes:
 			if not x in item: item[x]=self.neededAttributes[x]
-		self.modify_item(item)
+		self.modify_item_noUpdate(item)
 		return item
 
 	def update_items(self):
@@ -115,9 +116,33 @@ class items:
 			temp.close()
 		else:
 			raise TypeError("connot deal with "+str(type(name))+"  :  "+ str(name))
-
-		
 		self.update_items()
+
+	def modify_item_noUpdate(self,name,quantity=None,used=None,tags=None,daysAllowed=None):
+		#update the file WITHOUT calling the self.update_people method
+		#this is mainly to fix a duplication bug in that the fixValidation thing would
+		#call modify_item and that then calls another run of the self.update_items method
+		if type(name)==type("") and quantity:
+			temp=open('items/'+name+'.info','w')
+			temp.write('quantity='+quantity+'\n')
+			temp.write('used='+used+'\n')
+			if type(tags)==list:
+				temp.write('tags=')
+				for tag in tags:
+					temp.write(tag+' ')
+				temp.write('\n')
+			if type(tags)==type('') or type(tags)==type(""):
+				temp.write('tags='+tags+'\n')
+			temp.write('daysAllowed='+str(daysAllowed)+'\n')
+			temp.close()
+		elif type(name)==type({}):
+			temp=open('items/'+name['name']+'.info','w')
+			for x in name:
+				if type(name[x])==type(""):temp.write(x+'='+name[x]+'\n')
+				else:raise TypeError("connot write to file anything but strings : "+str(x)+'   '+type(x))
+			temp.close()
+		else:
+			raise TypeError("connot deal with "+str(type(name))+"  :  "+ str(name))
 				
 	def add_item(self,name,quantity='',used='',tags=''):
 		self.modify_item(name,quantity,used,tags) #got lazy, but hey, it does the job

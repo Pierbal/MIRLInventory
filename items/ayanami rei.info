@@ -3,5 +3,6 @@ premiumStatus=1
 name=ayanami rei
 tags=evangelion instramentality project
 price=20000.0
+hoursAllowed=0
 daysAllowed=16
 quantity=1024

@@ -3,5 +3,6 @@ premiumStatus=1
 name=anime
 tags=japan
 price=35.0
+hoursAllowed=0
 daysAllowed=1000
 quantity=9999

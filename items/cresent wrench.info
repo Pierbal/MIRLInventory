@@ -3,5 +3,6 @@ premiumStatus=0
 name=cresent wrench
 tags=wrench cresent
 price=12.0
+hoursAllowed=0
 daysAllowed=10
 quantity=3
