@@ -17,7 +17,8 @@ class people:
 							'phoneNumber':'0000',
 							'premiumStatus':"0",
 							'room':"None",
-							'email':"None"
+							'email':"None",
+							'emailedLast':'1-1-1999-00-00'
 							}
 		self.update_people()
 
