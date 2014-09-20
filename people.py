@@ -7,11 +7,12 @@ from email.MIMEText import MIMEText
 from multiprocessing import Process
 
 #this is a complete pain
-#save an instance like self.people=people()
-#you can then use in for loops like    for person in self.people: print person['name']
+#save an instance like ppp=people()
+#you can then use in for loops like    for person in ppp: print person['name']
 #also, you can get people like   self.person[27]    or more straight forward    self.person['Alex Harper']
 
 class people:
+	people=[]
 	overdueEmailThread=[]
 	def __init__(self):
 		self.neededAttributes={'name':'JohnDoe',
@@ -25,9 +26,9 @@ class people:
 		self.update_people()
 
 	def search_people(self, terms):
-		if len(terms)==0:return self.people
+		if len(terms)==0:return people.people
 		found=[]
-		for person in self.people:
+		for person in people.people:
 			for term in terms.split():
 				if term in person['name']:
 					found.append(person)
@@ -43,14 +44,14 @@ class people:
 		if not type(item)==type(""):
 			raise TypeError("cannot handle "+str(type(item))+"  :  "+str(item))
 		tempPeople=[]
-		for person in self.people:
+		for person in people.people:
 			for x in person['items']:
 				if x[0]==item:
 					tempPeople.append(person)
 		return tempPeople
 
 	def get_person(self,name):
-		for person in self.people:
+		for person in people.people:
 			if person['name']==name:return person
 			if person['IDNumber']==name:return person
 		return None
@@ -76,16 +77,16 @@ class people:
 
 	def __getitem__(self,entry):
 		if type(entry)==type(0): #if an integer
-			return self.people[entry]
+			return people.people[entry]
 		else:
 			return self.get_person(entry)
 
 	def __iter__(self):
-		for person in self.people:
+		for person in people.people:
 			yield person
 
 	def __len__(self):
-		return len(self.people)
+		return len(people.people)
 
 	def isOverdue(self,item):
 		if not type(item)==type([]):
@@ -173,7 +174,7 @@ class people:
 		#note that this is the exact same as the simular named method above. This IS NECISSARY STILL
 		#This is here to fix the problem of there being person duplication when fixing invalid people
 		#the method above calls the self.update_people() method and so it parses files twice and adds 
-		#more people to the self.people list. This here is functionally identical except that it will
+		#more people to the people.people list. This here is functionally identical except that it will
 		#NOT call the update method
 		if type(IDNumber)==type({}): #if you pass in a dict then it will do the work still
 			temp=open('people/'+IDNumber["IDNumber"]+'.info','w') #NOTE!: IDNumber is really the person dict
@@ -196,14 +197,14 @@ class people:
 			temp.close()
 
 	def update_people(self):
-		people=[]
+		ppp=[]
 		for x in os.walk('people'):
-			people=x[2]
+			ppp=x[2]
 			break
-		self.people=[]
-		for person in people:
-			self.people.append({'items':[]})
-			self.people[-1]['IDNumber']=person.split('.')[0]
+		people.people=[]
+		for person in ppp:
+			people.people.append({'items':[]})
+			people.people[-1]['IDNumber']=person.split('.')[0]
 			temp=open('people/'+person,'r')
 			itemsSection=False #flips to true when we find the list of items checked out by the person
 			for line in temp:
@@ -215,19 +216,19 @@ class people:
 					value=''
 					key=line.split("=")[0]
 					value=line.split("=")[1][:-1] #remember that this will have a newline at the end
-					self.people[-1][key]=value
+					people.people[-1][key]=value
 				if itemsSection==True: #format has changed!!!!!! the format is for the items which are always at the end of the file
 					item=line.split('=')[0]
 					date=line.split('=')[1]
 					state=line.split('=')[2][:-1]
 					line=line[1:] #remove the line since we got the info already
-					self.people[-1]['items'].append([item,date,state])
-			if not self.validatePerson(self.people[-1]):
-				print "invalid person "+self.people[-1]['name']
-				self.people[-1]=self.fixInvalidPerson(self.people[-1])
+					people.people[-1]['items'].append([item,date,state])
+			if not self.validatePerson(people.people[-1]):
+				print "invalid person "+people.people[-1]['name']
+				people.people[-1]=self.fixInvalidPerson(people.people[-1])
 
 		#sort people by their name
-		self.people.sort(key=lambda a:a['name'])
+		people.people.sort(key=lambda a:a['name'])
 
 	def deletePerson(self,person):
 		if type(person)==type({}):
@@ -236,9 +237,9 @@ class people:
 			raise TypeError("Did not send in a usable type "+str(type(person)))
 		#can assume we have the idnumber now
 		os.remove('people/'+person+'.info')
-		for p in xrange(len(self.people)):
-			if person==self.people[p]['IDNumber']:
-				del self.people[p]
+		for p in xrange(len(people.people)):
+			if person==people.people[p]['IDNumber']:
+				del people.people[p]
 				break
 
 				
@@ -295,7 +296,7 @@ class people:
 		while(len(people.overdueEmailThread)>2):
 			for x in xrange(len(people.overdueEmailThread),0,-1):
 				if not people.overdueEmailThread[x].is_alive():
-					del people.overdueEmailThread
+					del people.overdueEmailThread[x]
 
 	def emailPersonOverdue(self,person,message=""):
 		#send an email with all information of overdue items, account info
