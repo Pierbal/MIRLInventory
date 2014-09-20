@@ -161,7 +161,7 @@ class personWindow(Toplevel):
 		if self.searchedItems[index]['quantity']==self.searchedItems[index]['used']:
 			return
 		item=[self.searchedItems[index]['name'],"place-holderDate","out"]
-		dueDate=(datetime.today()+timedelta(int(self.searchedItems[index]["daysAllowed"]))).strftime("%m-%d-%Y")
+		dueDate=(datetime.today()+timedelta(int(self.searchedItems[index]["daysAllowed"]))).strftime("%m-%d-%Y-%H-%M")
 		item[1]=dueDate
 		self.person['items'].append(item)
 		self.people.modify_person(self.person)
