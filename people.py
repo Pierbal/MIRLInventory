@@ -4,7 +4,7 @@ from items import items
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
-from multiprocessing import Process
+from threading import Thread
 
 #this is a complete pain
 #save an instance like ppp=people()
@@ -277,7 +277,7 @@ class people:
 	def emailPeopleOverdue(self):
 		#emails all people with overdue things
 		#special in that it will not freeze the program while emailing the people
-		people.overdueEmailThread.append(Process(target=self.__emailPeopleOverdue))
+		people.overdueEmailThread.append(Thread(target=self.__emailPeopleOverdue))
 		people.overdueEmailThread[-1].start()
 	def __emailPeopleOverdue(self):
 		#emails all people with overdue things
@@ -294,14 +294,16 @@ class people:
 				self.modify_person_noUpdate(person)#dont waste cycles updating the list from the HDD since this is a temporary list
 		#clean the list of threads so that we can free some memory
 		while(len(people.overdueEmailThread)>2):
-			for x in xrange(len(people.overdueEmailThread),0,-1):
+			for x in xrange(len(people.overdueEmailThread)-1,0,-1):
+				print people.overdueEmailThread[x]
 				if not people.overdueEmailThread[x].is_alive():
+					print 'removing thread',x
 					del people.overdueEmailThread[x]
 
 	def emailPersonOverdue(self,person,message=""):
 		#send an email with all information of overdue items, account info
 		#this is special in that it will not freeze up the program while running the stuff
-		people.overdueEmailThread.append(Process(target=self.__emailPersonOverdue,args=(person,message)))
+		people.overdueEmailThread.append(Thread(target=self.__emailPersonOverdue,args=(person,message)))
 		people.overdueEmailThread[-1].start()#start what we just added
 	def __emailPersonOverdue(self,person,message=""):
 		#send an email with all information of overdue items, account info
