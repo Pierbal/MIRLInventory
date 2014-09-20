@@ -20,7 +20,7 @@ root.columnconfigure(0,weight=1)
 #body
 buttonPerson=Button(root,text="Person Selection")
 buttonPerson.grid(row=0,column=0,sticky=N+S+E+W,padx=3,pady=3)
-entryAdmin=Entry(root)
+entryAdmin=Entry(root,show="*")
 entryAdmin.grid(row=1,column=0)
 buttonAdmin=Button(root,text="Admin Window")
 buttonAdmin.grid(row=2,column=0)
@@ -32,7 +32,9 @@ buttonPerson.config(command=selectPerson)
 
 #Admin Takes a Password - will be changed to use a password from a file
 def administration(ignore=""):
-	if entryAdmin.get()=="37and34":adminWindow=adminWindowBase(root)
+	if entryAdmin.get()=="37and34":
+		entryAdmin.delete(0,END)
+		adminWindow=adminWindowBase(root)
 buttonAdmin.config(command=administration)
 
 def dynamicResizing(ignore=''):
