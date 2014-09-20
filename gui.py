@@ -45,23 +45,11 @@ def dynamicResizing(ignore=''):
 root.bind("<Configure>",dynamicResizing)
 
 def checkForOverdue(ignore=""):
-	now=datetime.today() #gives back the time now equivilent
-	print now
 	ppp=people()
-	for person in ppp:
-		if len(ppp.overdueItems(person))==0:continue #is first so that we dont waste cycles making the datetime if not needed
-		last=datetime.strptime(person['emailedLast'],"%m-%d-%Y-%H-%M") #the time the person was emailed last
-		print person['name'],'has overdue items'
-		if (now-last)>timedelta(hours=4): #if it has been more than 4 hours
-			print '\tEmailing',person["name"]
-			ppp.emailPersonOverdue(person) #send the overdue email
-			person['emailedLast']=datetime.strftime(now,"%m-%d-%Y-%H-%M") #update the last time emailed to now
-			ppp.modify_person_noUpdate(person)#dont waste cycles updating the list from the HDD since this is a temporary list
-
+	ppp.emailPeopleOverdue()
 	#repeat the timed check
 	root.after(1000*60*5,checkForOverdue) #1000ms*60s*5mins  so basicly every 5 mins check for overdue items
 #root.after(1000,checkForOverdue)
-p=Process(target=checkForOverdue)
-p.start()
+checkForOverdue()
 
 root.mainloop()

@@ -1,9 +1,10 @@
 import os
-from datetime import datetime 
+from datetime import datetime,timedelta
 from items import items
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
+from multiprocessing import Process
 
 #this is a complete pain
 #save an instance like self.people=people()
@@ -11,6 +12,7 @@ from email.MIMEText import MIMEText
 #also, you can get people like   self.person[27]    or more straight forward    self.person['Alex Harper']
 
 class people:
+	overdueEmailThread=[]
 	def __init__(self):
 		self.neededAttributes={'name':'JohnDoe',
 							"IDNumber":'0000',
@@ -271,7 +273,36 @@ class people:
 			print "UNABLE TO SEND EMAIL!!!!"
 			print r
 
+	def emailPeopleOverdue(self):
+		#emails all people with overdue things
+		#special in that it will not freeze the program while emailing the people
+		people.overdueEmailThread.append(Process(target=self.__emailPeopleOverdue))
+		people.overdueEmailThread[-1].start()
+	def __emailPeopleOverdue(self):
+		#emails all people with overdue things
+		now=datetime.today() #gives back the time now equivilent
+		print now
+		for person in self:
+			if len(self.overdueItems(person))==0:continue #is first so that we dont waste cycles making the datetime if not needed
+			last=datetime.strptime(person['emailedLast'],"%m-%d-%Y-%H-%M") #the time the person was emailed last
+			print person['name'],'has overdue items'
+			if (now-last)>timedelta(hours=4): #if it has been more than 4 hours
+				print '\tEmailing',person["name"]
+				self.emailPersonOverdue(person) #send the overdue email
+				person['emailedLast']=datetime.strftime(now,"%m-%d-%Y-%H-%M") #update the last time emailed to now
+				self.modify_person_noUpdate(person)#dont waste cycles updating the list from the HDD since this is a temporary list
+		#clean the list of threads so that we can free some memory
+		while(len(people.overdueEmailThread)>2):
+			for x in xrange(len(people.overdueEmailThread),0,-1):
+				if not people.overdueEmailThread[x].is_alive():
+					del people.overdueEmailThread
+
 	def emailPersonOverdue(self,person,message=""):
+		#send an email with all information of overdue items, account info
+		#this is special in that it will not freeze up the program while running the stuff
+		people.overdueEmailThread.append(Process(target=self.__emailPersonOverdue,args=(person,message)))
+		people.overdueEmailThread[-1].start()#start what we just added
+	def __emailPersonOverdue(self,person,message=""):
 		#send an email with all information of overdue items, account info
 		self.items=items()
 		if not type(person)==type({}): raise TypeError("You MUST send in a person dict")
