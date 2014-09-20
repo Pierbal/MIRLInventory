@@ -162,7 +162,7 @@ class adminWindowBase(Toplevel):
 		index=int(self.elements['itemsList'].curselection()[0])
 		for person in self.people:
 			for item in person['items']:
-				if item[0]==self.searchedItems[index]['name']:
+				if item[0]==self.searchedItems[index]['name'] and item[2]=='in': #see if the person has checked out a copy of the item
 					print "UNABLE TO DELETE "+item[0]+" BECAUSE SOMEONE HAS ONE CHECKED OUT"
 					return #so that it never touches the bottom
 		self.items.delete_item(self.searchedItems[index])
