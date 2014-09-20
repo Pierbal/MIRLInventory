@@ -295,9 +295,7 @@ class people:
 		#clean the list of threads so that we can free some memory
 		while(len(people.overdueEmailThread)>2):
 			for x in xrange(len(people.overdueEmailThread)-1,0,-1):
-				print people.overdueEmailThread[x]
 				if not people.overdueEmailThread[x].is_alive():
-					print 'removing thread',x
 					del people.overdueEmailThread[x]
 
 	def emailPersonOverdue(self,person,message=""):
