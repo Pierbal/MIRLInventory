@@ -1,11 +1,12 @@
 premiumStatus=0
 room=EGC Electrical Suite
 IDNumber=No Need
+emailedLast=09-19-2014-22-55
 phoneNumber=None
 email=none
 name=Dr Choi
 items:
-hammer=04-23-2014=out
-hammer=04-23-2014=out
-hammer=04-23-2014=out
-needle nose pliers=04-23-2014=out
+hammer=04-23-2014-00-00=out
+hammer=04-23-2014-00-00=out
+hammer=04-23-2014-00-00=out
+needle nose pliers=04-23-2014-00-00=out

@@ -249,7 +249,8 @@ class people:
 		message+="Due Items:\n"
 		cost=0
 		for x in self.dueItems(person):
-			message+="    due "+x[1]+" - cost: "+self.items.getitem(x[0])['price']+"  --  "+x[0]+'\n'
+			date=x[1][:10] #get a sensible date from the item
+			message+="    due "+date+"  --  cost: "+self.items.getitem(x[0])['price']+"  --  "+x[0]+'\n'
 			cost+=float(self.items.getitem(x[0])['price'])
 		message+='\nCharges Due If Not Returned: '+str(cost)
 		message+="\n\nPlease contact mirllabmanager@gmail.com for any questions or concerns\n\n"
@@ -274,3 +275,41 @@ class people:
 		#send an email with all information of overdue items, account info
 		self.items=items()
 		if not type(person)==type({}): raise TypeError("You MUST send in a person dict")
+		message="MIRL CHECKOUT SYSTEM UPDATE EMAIL\nPlease read over the information for correctness\n\n"+person['name']+' - '+person["room"]+'\n'+message+'\n'
+
+		message+="Overdue Items :\n"
+		for x in self.overdueItems(person):
+			date=x[1][:10] #get a sensible date from the item
+			message+="    OVERDUE "+date+"  --  cost: "+self.items.getitem(x[0])['price']+"  --  "+x[0]+'\n'
+		message+="\nThe items listed above should be returned as soon as possible\nIf the items are not returned soon, you may be liable for charges\n\n\n"
+
+		message+="Due Items:\n"
+		cost=0
+		overdueCost=0
+		for x in self.dueItems(person):
+			date=x[1][:10] #get a sensible date from the item
+			if self.isOverdue(x):
+				message+="    OVERDUE  --  "+date+" - cost: "+self.items.getitem(x[0])['price']+"  --  "+x[0]+'  --  OVERDUE\n'
+				overdueCost+=float(self.items.getitem(x[0])['price'])
+			else:
+				message+="    due "+date+"  --  cost: "+self.items.getitem(x[0])['price']+"  --  "+x[0]+'\n'
+			cost+=float(self.items.getitem(x[0])['price'])
+		message+='\nCharges Due If Not Returned: '+str(cost)
+		message+='\nCharges Due For Overdue Items: '+str(overdueCost)
+		message+="\n\nPlease contact mirllabmanager@gmail.com for any questions or concerns\n\n"
+
+		fullMessage=MIMEMultipart()
+		fullMessage['From']="mirlcheckoutsystem@gmail.com"
+		fullMessage["To"]=person['email']
+		fullMessage["Subject"]="MIRL TOOLS UPDATE"
+		fullMessage.attach(MIMEText(message,'plain'))
+
+		try:
+			server=smtplib.SMTP()
+			server.connect('smtp.gmail.com',587)
+			server.starttls()
+			server.login("mirlcheckoutsystem@gmail.com","labmanager232")
+			server.sendmail("mirlcheckoutsystem@gmail.com",person['email'],fullMessage.as_string()) #from,to,message
+		except Exception,r:
+			print "UNABLE TO SEND EMAIL!!!!"
+			print r
