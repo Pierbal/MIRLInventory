@@ -43,13 +43,15 @@ root.bind("<Configure>",dynamicResizing)
 
 def checkForOverdue(ignore=""):
 	now=datetime.today() #gives back the time now equivilent
+	print now
 	ppp=people()
 	for person in ppp:
 		if len(ppp.overdueItems(person))==0:continue #is first so that we dont waste cycles making the datetime if not needed
 		last=datetime.strptime(person['emailedLast'],"%m-%d-%Y-%H-%M") #the time the person was emailed last
+		print person['name'],'has overdue items'
 		if (now-last)>timedelta(hours=4): #if it has been more than 4 hours
+			print '\tEmailing',person["name"]
 			ppp.emailPersonOverdue(person) #send the overdue email
-			print person['name'],'has overdue items'
 			person['emailedLast']=datetime.strftime(now,"%m-%d-%Y-%H-%M") #update the last time emailed to now
 			ppp.modify_person_noUpdate(person)#dont waste cycles updating the list from the HDD since this is a temporary list
 

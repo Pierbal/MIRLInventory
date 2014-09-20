@@ -57,12 +57,18 @@ class people:
 		if not type(person)==type({}):person=self[person]
 		for x in self.neededAttributes:
 			if not x in person: return False
+		for x in xrange(len(person['items'])):
+			if len(person['items'][x][1].split('-'))==3: #using the old format
+				return False
 		return True
 
 	def fixInvalidPerson(self,person):
 		if not type(person)==type({}):person=self[person]
 		for x in self.neededAttributes:
 			if not x in person: person[x]=self.neededAttributes[x]
+		for x in xrange(len(person['items'])):
+			if len(person['items'][x][1].split('-'))==3: #using the old format
+				person['items'][x][1]+=("-00-00")#default the TIME to 0hours and 0mins
 		self.modify_person_noUpdate(person) #write changes to file
 		return person
 
@@ -83,7 +89,7 @@ class people:
 		if not type(item)==type([]):
 			raise TypeError("please pass in an item from a person. i need the date from it")
 		today=datetime.today()
-		itemTime=datetime.strptime(item[1],"%m-%d-%Y")
+		itemTime=datetime.strptime(item[1],"%m-%d-%Y-%H-%M")
 		if (item[2]=='out' or item[2]=='damaged') and itemTime<today:
 			return True
 		return False
@@ -101,7 +107,7 @@ class people:
 		overdueItems=[]
 		today=datetime.today()
 		for x in person["items"]:
-			itemTime=datetime.strptime(x[1],"%m-%d-%Y")
+			itemTime=datetime.strptime(x[1],"%m-%d-%Y-%H-%M")
 			if self.isOverdue(x):
 				overdueItems.append(x)
 		return overdueItems
