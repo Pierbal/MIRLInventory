@@ -3,6 +3,7 @@ from selectPersonWindow import personSelectWindow
 from adminWindowBase import adminWindowBase
 from people import people
 from datetime import datetime,timedelta
+from multiprocessing import Process
 
 #Really simple window that simply starts the cascade of more windows.
 #this is the only non-opject window
@@ -59,6 +60,8 @@ def checkForOverdue(ignore=""):
 
 	#repeat the timed check
 	root.after(1000*60*5,checkForOverdue) #1000ms*60s*5mins  so basicly every 5 mins check for overdue items
-root.after(1000,checkForOverdue)
+#root.after(1000,checkForOverdue)
+p=Process(target=checkForOverdue)
+p.start()
 
 root.mainloop()
