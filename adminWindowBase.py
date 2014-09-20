@@ -210,7 +210,7 @@ class adminWindowBase(Toplevel):
 	def modifyPerson_call(self,ignore=""):self.root.after(1,self.modifyPerson)
 	def modifyPerson(self,ignore=""):
 		index=int(self.elements['peopleList'].curselection()[0])
-		adminPersonModify(self,self.searchedPeople[index])
+		adminPersonModify(self,self.people.get_person(self.searchedPeople[index]['IDNumber'])) #grab a fresh copy of info from the people object and modify that
 		self.people.update_people()
 		self.searchItems()
 		self.elements['peopleList'].select_set(index)
