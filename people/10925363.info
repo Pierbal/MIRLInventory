@@ -1,4 +1,4 @@
-premiumStatus=1
+premiumStatus=0
 room=SEB 232
 IDNumber=10925363
 emailedLast=09-19-2014-23-41
@@ -45,6 +45,7 @@ anime=06-10-2017-00-00=in
 ovilixer=10-10-2010-00-00=in
 anime=06-10-2017-00-00=out
 cresent wrench=09-24-2014-00-00=in
-cresent wrench=08-24-2014-00-00=out
-cresent wrench=09-24-2014-00-00=out
+cresent wrench=08-24-2014-00-00=in
 cresent wrench=09-29-2014-00-00=out
+cresent wrench=09-29-2014-23-55=out
+hammer=09-22-2014-23-56=in

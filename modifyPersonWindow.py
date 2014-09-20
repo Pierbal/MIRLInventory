@@ -148,7 +148,7 @@ class personWindow(Toplevel):
 				break
 		self.people.modify_person(self.person)
 
-		otherVersionOfTheItem=self.items.getitem(item[0])
+		otherVersionOfTheItem=self.items.getitem(item[0]) #temp storage of the item we are modifing
 		otherVersionOfTheItem['used']=str(int(otherVersionOfTheItem['used'])-1)
 		self.items.modify_item(otherVersionOfTheItem)
 
@@ -181,8 +181,10 @@ class personWindow(Toplevel):
 				self.elements["itemsHave"].itemconfig(END,bg='red')
 			else:
 				self.elements["itemsHave"].itemconfig(END,bg='green')
+		self.searchedItems=[]
 		self.elements['itemsAvailable'].delete(0,END)
 		for item in self.items:
+			if item['premiumStatus']=='1' and self.person['premiumStatus']=='0':continue
 			self.elements['itemsAvailable'].insert(END,item['name'])
 			self.searchedItems.append(item)
 			if item["used"]==item["quantity"]:self.elements['itemsAvailable'].itemconfig(END,bg='red')
