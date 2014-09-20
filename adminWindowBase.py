@@ -166,7 +166,7 @@ class adminWindowBase(Toplevel):
 					print "UNABLE TO DELETE "+item[0]+" BECAUSE SOMEONE HAS ONE CHECKED OUT"
 					return #so that it never touches the bottom
 		self.items.delete_item(self.searchedItems[index])
-		self.redrawLists()
+		self.searchItems()
 
 	def modifyItem_call(self,ignore=""):self.root.after(1,self.modifyItem)
 	def modifyItem(self,ignore=""):
