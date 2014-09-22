@@ -3,6 +3,7 @@ from people import people
 from items import items
 from PIL import Image,ImageTk
 from datetime import datetime,timedelta
+from errorWindow import PopupErrorBox
 
 #for a single person it will checkin or out items
 #it will send a new email to the person after changing any status
@@ -158,7 +159,8 @@ class personWindow(Toplevel):
 	def checkoutItem(self,ignore=""):
 		self.modifiedItems=True
 		index=int(self.elements["itemsAvailable"].curselection()[0])
-		if self.searchedItems[index]['quantity']==self.searchedItems[index]['used']:
+		if int(self.searchedItems[index]['quantity'])<=int(self.searchedItems[index]['used']):
+			PopupErrorBox(self,"Sorry but you cannot check out\n"+self.searchedItems[index]['name']+"\nbecause the max number allowed to be\nchecked out has been reached")
 			return
 		item=[self.searchedItems[index]['name'],"place-holderDate","out"]
 		dueDate=(datetime.today()+timedelta(int(self.searchedItems[index]["daysAllowed"]))).strftime("%m-%d-%Y-%H-%M")
