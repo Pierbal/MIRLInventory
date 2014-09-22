@@ -51,11 +51,6 @@ class adminItemModify(Toplevel):
 		self.elements['priceEntry']=Entry(self.rootFrame)
 		self.elements['priceEntry'].grid(row=5,column=1,sticky=W+E)
 		self.elements['priceEntry'].insert(0,self.item['price'])
-		self.elements['tagsLabel']=Label(self.rootFrame,text="Tags: ")
-		self.elements['tagsLabel'].grid(row=6,column=0,sticky=W)
-		self.elements['tagsEntry']=Entry(self.rootFrame)
-		self.elements['tagsEntry'].grid(row=6,column=1,sticky=E+W)
-		self.elements["tagsEntry"].insert(0,self.item['tags'])
 
 		self.elements['premiumLabel']=Label(self.rootFrame,text="Premium Item: ")
 		self.elements['premiumLabel'].grid(row=6,column=0,sticky=W)
@@ -65,6 +60,12 @@ class adminItemModify(Toplevel):
 		self.elements['premiumEntry'].state=temp
 		if self.item['premiumStatus']=='1':self.elements['premiumEntry'].select()
 		else:self.elements['premiumEntry'].deselect()
+
+		self.elements['tagsLabel']=Label(self.rootFrame,text="Tags: ")
+		self.elements['tagsLabel'].grid(row=7,column=0,sticky=W)
+		self.elements['tagsEntry']=Entry(self.rootFrame)
+		self.elements['tagsEntry'].grid(row=7,column=1,sticky=E+W)
+		self.elements["tagsEntry"].insert(0,self.item['tags'])
 
 		self.elements['imageLabel']=Label(self.rootFrame)
 		self.elements['imageLabel'].grid(row=1,column=3,rowspan=7,columnspan=2)
