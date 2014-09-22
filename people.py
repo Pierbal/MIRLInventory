@@ -23,6 +23,7 @@ class people:
 							'email':"None",
 							'emailedLast':'1-1-1999-00-00'
 							}
+		datetime.strftime(datetime.strptime('2001-08-21','%Y-%m-%d'),'%Y-%m-%d') #don not remove! it fixes an import error that happens when multithreading
 		self.update_people()
 
 	def search_people(self, terms):
@@ -92,7 +93,7 @@ class people:
 		if not type(item)==type([]):
 			raise TypeError("please pass in an item from a person. i need the date from it")
 		today=datetime.today()
-		itemTime=datetime.strptime(item[1],"%m-%d-%Y-%H-%M")
+		itemTime=self.makeDateTime(item[1])
 		if (item[2]=='out' or item[2]=='damaged') and itemTime<today:
 			return True
 		return False
@@ -110,7 +111,7 @@ class people:
 		overdueItems=[]
 		today=datetime.today()
 		for x in person["items"]:
-			itemTime=datetime.strptime(x[1],"%m-%d-%Y-%H-%M")
+			itemTime=self.makeDateTime(x[1])
 			if self.isOverdue(x):
 				overdueItems.append(x)
 		return overdueItems
@@ -135,7 +136,7 @@ class people:
 		if person==None:
 			print "Will on day return a list of lists that have all people and the assosiated DUE items, and not past items"
 			return
-		elif type(person)==type("") or type(person)==type(0): #we already have figured out how to get people by index terms like this so we are using these
+		elif type(person)==type("") or type(person)==type(0): #we already have figured out how to get people by index terms like this so we are using this
 			person=self[person]
 		if person==None: #it got here which means the person was searched for and not found.
 			return None #no person means bad search
@@ -242,8 +243,19 @@ class people:
 				del people.people[p]
 				break
 
-				
+	
+	def makeDateTime(self,date):
+		#replaces the following
+		#datetime.strptime(x[1],"%m-%d-%Y-%H-%M")
+		date=date.split('-')
+		return datetime(month=int(date[0]),
+						day=int(date[1]),
+						year=int(date[2]),
+						hour=int(date[3]),
+						minute=int(date[4])
+						)
 
+	#Email section follows
 	def emailPerson(self,person,message=""):
 		#send an email with all information of due items, account info, and overdue items
 		self.items=items()
@@ -284,8 +296,13 @@ class people:
 		now=datetime.today() #gives back the time now equivilent
 		print now
 		for person in self:
-			if len(self.overdueItems(person))==0:continue #is first so that we dont waste cycles making the datetime if not needed
-			last=datetime.strptime(person['emailedLast'],"%m-%d-%Y-%H-%M") #the time the person was emailed last
+			overdueItems=[]
+			for x in person["items"]:
+				itemTime=self.makeDateTime(x[1])
+				if x[2]=='out' or x[2]=='damaged' and itemTime<now:
+					overdueItems.append(x)
+			if len(overdueItems)==0:continue #is first so that we dont waste cycles making the datetime if not needed
+			last=self.makeDateTime(person['emailedLast']) #the time the person was emailed last
 			print person['name'],'has overdue items'
 			if (now-last)>timedelta(hours=4): #if it has been more than 4 hours
 				print '\tEmailing',person["name"]
@@ -293,10 +310,11 @@ class people:
 				person['emailedLast']=datetime.strftime(now,"%m-%d-%Y-%H-%M") #update the last time emailed to now
 				self.modify_person_noUpdate(person)#dont waste cycles updating the list from the HDD since this is a temporary list
 		#clean the list of threads so that we can free some memory
-		while(len(people.overdueEmailThread)>2):
+		if(len(people.overdueEmailThread)>2):
 			for x in xrange(len(people.overdueEmailThread)-1,0,-1):
 				if not people.overdueEmailThread[x].is_alive():
 					del people.overdueEmailThread[x]
+		print 'Done Emailing'
 
 	def emailPersonOverdue(self,person,message=""):
 		#send an email with all information of overdue items, account info
